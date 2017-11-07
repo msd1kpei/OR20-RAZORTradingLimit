@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Mediator name="TradingLimitMediator" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.oracle.com/sca/1.0/mediator">
+   <operation name="Read-OR20-sendTradingLimit" deliveryPolicy="AllOrNothing" priority="4" validateSchema="false">
+      <switch>
+         <case executionType="direct" name="TradingLimitBPEL.tradinglimitbpel_client.process">
+            <action>
+               <transform>
+                  <part name="$out.payload" function="xslt(xsl/kpeiOutbound_To_BPEL.xsl, $in.body)"/>
+               </transform>
+               <invoke reference="TradingLimitBPEL.tradinglimitbpel_client" operation="process"/>
+            </action>
+         </case>
+      </switch>
+   </operation>
+</Mediator>

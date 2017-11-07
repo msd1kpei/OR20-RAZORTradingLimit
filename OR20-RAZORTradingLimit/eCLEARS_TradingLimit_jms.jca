@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<adapter-config name="eCLEARS_TradingLimit" adapter="JMS Adapter" wsdlLocation="eCLEARS_TradingLimit.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+   <connection-factory location="eis/jms/razorMidTradingLimit" UIJmsProvider="WLSJMS" UIConnectionName="kpeisoa" adapterRef=""/>
+   <endpoint-interaction portType="sendToEclearsTradingLimit_ptt" operation="sendToEclearsTradingLimit">
+      <interaction-spec className="oracle.tip.adapter.jms.outbound.JmsProduceInteractionSpec">
+         <property name="TimeToLive" value="0"/>
+         <property name="PayloadType" value="TextMessage"/>
+         <property name="DeliveryMode" value="Persistent"/>
+         <property name="DestinationName" value="jms/middleware/outbound/MidTradingLimitQueue"/>
+      </interaction-spec>
+   </endpoint-interaction>
+</adapter-config>

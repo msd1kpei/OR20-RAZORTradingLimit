@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<adapter-config name="OR20-sendTradingLimit" adapter="File Adapter" wsdlLocation="OR20_sendTradingLimit.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+   <connection-factory location="eis/FileAdapter" UIincludeWildcard="*tradingLimit*.xml" adapterRef=""/>
+   <endpoint-activation portType="Read_OR20_sendTradingLimit_ptt" operation="Read-OR20-sendTradingLimit">
+      <activation-spec className="oracle.tip.adapter.file.inbound.FileActivationSpec">
+         <property name="DeleteFile" value="true"/>
+         <property name="MinimumAge" value="0"/>
+         <property name="PhysicalDirectory" value="/mnt/rzStandby/rzStandby/gateway/outbound/tradingLimit"/>
+         <property name="Recursive" value="false"/>
+         <property name="PollingFrequency" value="5"/>
+         <property name="PhysicalArchiveDirectory" value="/mnt/rzStandby/rzStandby/gateway/outbound/tradingLimit/archive"/>
+         <property name="PhysicalErrorArchiveDirectory" value="/mnt/rzStandby/rzStandby/gateway/outbound/tradingLimit/error"/>
+         <property name="IncludeFiles" value=".*tradingLimit.*\.xml"/>
+         <property name="UseHeaders" value="false"/>
+      </activation-spec>
+   </endpoint-activation>
+</adapter-config>

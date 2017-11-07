@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<componentType xmlns="http://xmlns.oracle.com/sca/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ui="http://xmlns.oracle.com/soa/designer/">
+   <service name="tradinglimitbpel_client" ui:wsdlLocation="TradingLimitBPEL.wsdl">
+      <interface.wsdl interface="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL#wsdl.interface(TradingLimitBPEL)"/>
+   </service>
+   <reference name="RMOL_write" ui:wsdlLocation="RMOL_write.wsdl">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/RMOL_write#wsdl.interface(Write_RMOL_ptt)"/>
+   </reference>
+   <reference name="GE01-MessageMonitor" ui:wsdlLocation="messageMonitorServiceRef.wsdl">
+      <interface.wsdl interface="http://oracle.com/sca/soapservice/KPEI-MIDDLEWARE/Ge01-messageMonitor/messageMonitorService#wsdl.interface(messageMonitor)"/>
+   </reference>
+   <reference name="GE03-XMLUtility" ui:wsdlLocation="GE03-XMLUtilityRef.wsdl">
+      <interface.wsdl interface="http://oracle.com/sca/soapservice/kpei/GE03-XMLUtility/GE03_XMLUtility#wsdl.interface(GE03-XMLUtility)"/>
+   </reference>
+   <reference name="GE02-FileUtility" ui:wsdlLocation="GE02-FileUtility1.wsdl">
+      <interface.wsdl interface="http://www.kpei.co.id/GE02-FileUtility#wsdl.interface(GE02-FileUtility)"/>
+   </reference>
+   <reference name="FITS_write" ui:wsdlLocation="FITS_write.wsdl">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/FITS_write#wsdl.interface(Write_FITS_ptt)"/>
+   </reference>
+   <reference name="Validator_write" ui:wsdlLocation="Validator_write.wsdl">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/Validator_write#wsdl.interface(Write_Validator_ptt)"/>
+   </reference>
+   <reference name="eCLEARS_TradingLimit" ui:wsdlLocation="eCLEARS_TradingLimit.wsdl">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/eCLEARS_TradingLimit#wsdl.interface(sendToEclearsTradingLimit_ptt)"/>
+   </reference>
+   <reference name="mi_ws" ui:wsdlLocation="mi_wsWrapper.wsdl">
+      <interface.wsdl interface="http://www.kpei.co.id/MemberInterface#wsdl.interface(MemberInterfaceServicesSoap)"/>
+   </reference>
+   <reference name="atl_ws" ui:wsdlLocation="AllocatedTradingLimitSetWrapper.wsdl">
+      <interface.wsdl interface="http://www.kpei.co.id/service/tradinglimit/AllocatedTradingLimitSet#wsdl.interface(execute_ptt)"/>
+   </reference>
+   <reference name="TradingLimit" ui:wsdlLocation="TradingLimit.wsdl">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/TradingLimit#wsdl.interface(Produce_Message_ptt)"/>
+   </reference>
+</componentType>

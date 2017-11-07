@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process name="TradingLimitBPEL" targetNamespace="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:client="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL" xmlns:ora="http://schemas.oracle.com/xpath/extension" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/RMOL_write" xmlns:ns2="http://oracle.com/sca/soapservice/KPEI-MIDDLEWARE/Ge01-messageMonitor/messageMonitorService" xmlns:ns3="http://oracle.com/sca/soapservice/kpei/GE03-XMLUtility/GE03_XMLUtility" xmlns:ns4="http://www.kpei.co.id/GE02-FileUtility" xmlns:ns5="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/FITS_write" xmlns:ns6="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/Validator_write" xmlns:bpelx="http://schemas.oracle.com/bpel/extension" xmlns:ns7="http://www.kpei.co.id/kpei/messageMonitor" xmlns:xpath20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20" xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc" xmlns:ns8="http://www.kpei.co.id/razor/TradingLimit" xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue" xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk" xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions" xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap" xmlns:ns9="http://www.kpei.co.id/middleware/outbound/tradingLimit" xmlns:ns10="http://www.kpei.co.id/razor/FreeCollateral/RMOL_write" xmlns:ns11="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/eCLEARS_TradingLimit" xmlns:socket="http://www.oracle.com/XSL/Transform/java/oracle.tip.adapter.socket.ProtocolTranslator" xmlns:mhdr="http://www.oracle.com/XSL/Transform/java/oracle.tip.mediator.service.common.functions.MediatorExtnFunction" xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath" xmlns:med="http://schemas.oracle.com/mediator/xpath" xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns12="http://www.kpei.co.id/GE03-XMLUtility/types" xmlns:ns13="http://www.kpei.co.id/MemberInterface" xmlns:bpel2="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions" xmlns:ns14="http://www.kpei.co.id/service/tradinglimit/AllocatedTradingLimitSet" xmlns:ns15="http://www.kpei.co.id/schema/tradinglimit/RAZORTradingLimit" xmlns:ns16="http://kpei.co.id/MDwsReply.xsd" xmlns:ns17="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/OR20_sendTradingLimit" xmlns:ns18="http://www.kpei.co.id/schema/TradingLimit" xmlns:ns19="http://www.kpei.co.id/schema/Header" xmlns:ns20="http://www.kpei.co.id/schema/Extension" xmlns:ns21="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/TradingLimit" id="BpPrc0">
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      PARTNERLINKS                                                      
+      List of services participating in this BPEL process               
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <partnerLinks>
+    <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="tradinglimitbpel_client" partnerLinkType="client:TradingLimitBPEL" myRole="TradingLimitBPELProvider"/>
+    <partnerLink name="RMOL_write" partnerRole="Write-RMOL_role" partnerLinkType="ns1:Write_RMOL_plt"/>
+    <partnerLink name="GE01-MessageMonitor" partnerRole="messageMonitor" partnerLinkType="ns2:GE01-MessageMonitor"/>
+    <partnerLink name="GE03-XMLUtility" partnerRole="GE03-XMLUtility" partnerLinkType="ns3:GE03-XMLUtility"/>
+    <partnerLink name="GE02-FileUtility" partnerRole="GE02-FileUtility" partnerLinkType="ns4:GE02-FileUtility"/>
+    <partnerLink name="FITS_write" partnerRole="Write-FITS_role" partnerLinkType="ns5:Write_FITS_plt"/>
+    <partnerLink name="Validator_write" partnerRole="Write-Validator_role" partnerLinkType="ns6:Write_Validator_plt"/>
+    <partnerLink name="eCLEARS_TradingLimit" partnerRole="sendToEclearsTradingLimit_role" partnerLinkType="ns11:sendToEclearsTradingLimit_plt"/>
+    <partnerLink name="mi_ws" partnerLinkType="ns13:mi_ws" partnerRole="MemberInterfaceServicesSoap"/>
+    <partnerLink name="atl_ws" partnerLinkType="ns14:atl_ws" partnerRole="execute_ptt"/>
+    <partnerLink name="TradingLimit" partnerRole="Produce_Message_role" partnerLinkType="ns21:Produce_Message_plt"/>
+  </partnerLinks>
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      VARIABLES                                                        
+      List of messages and XML documents used within this BPEL process 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <variables>
+    <!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="client:TradingLimitBPELRequestMessage"/>
+    <variable name="validator_msg" element="ns9:kpeiOutbound"/>
+    <variable name="e-CLEARSMsg" element="ns9:kpeiOutbound"/>
+    <variable name="FITSMsg" element="ns9:kpeiOutbound"/>
+    <variable name="RMOLMsg" element="ns10:records"/>
+    <variable name="RMOL_filename" type="xsd:string"/>
+    <variable name="FITS_filename" type="xsd:string"/>
+    <variable name="Validator_filename" type="xsd:string"/>
+    <variable name="invalidVar" messageType="bpelx:RuntimeFaultMessage"/>
+    <variable name="miRequest" messageType="ns13:SetClearingMemberLimitSoapIn"/>
+    <variable name="miReply" messageType="ns13:SetClearingMemberLimitSoapOut"/>
+    <variable name="miOutRequest" messageType="ns2:requestOutboundMessage"/>
+    <variable name="miOutReply" messageType="ns2:replyMessage"/>
+    <variable name="miRelRequest" messageType="ns2:requestRelationMessage"/>
+    <variable name="miRelReply" messageType="ns2:replyMessage"/>
+    <variable name="atlRequest" messageType="ns14:requestMessage"/>
+    <variable name="atlReply" messageType="ns14:replyMessage"/>
+    <variable name="atlOutRequest" messageType="ns2:requestOutboundMessage"/>
+    <variable name="atlOutReply" messageType="ns2:replyMessage"/>
+    <variable name="atlRelRequest" messageType="ns2:requestRelationMessage"/>
+    <variable name="atlRelReply" messageType="ns2:replyMessage"/>
+    <variable name="SKDMsg" element="ns18:TradingLimit"/>
+    <variable name="SKD_Produce_Message_InputVariable" messageType="ns21:Produce_Message_msg"/>
+  </variables>
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <sequence name="main" id="BpSeq0">
+    <!-- Receive input from requestor. (Note: This maps to operation defined in TradingLimitBPEL.wsdl) -->
+    <receive name="receiveInput" partnerLink="tradinglimitbpel_client" portType="client:TradingLimitBPEL" operation="process" variable="inputVariable" createInstance="yes" id="BpRcv0"/>
+    <scope name="processing" id="BpScp0">
+      <variables>
+        <variable name="inbound_sendInboundMonitor_InputVariable" messageType="ns2:requestInboundMessage"/>
+        <variable name="inbound_sendInboundMonitor_OutputVariable" messageType="ns2:replyMessage"/>
+        <variable name="eCLEARS_sendToEclearsTradingLimit_InputVariable" messageType="ns11:sendToEclearsTradingLimit_msg"/>
+        <variable name="eCLEARS_sendOutboundMonitor_InputVariable" messageType="ns2:requestOutboundMessage"/>
+        <variable name="eCLEARS_sendOutboundMonitor_OutputVariable" messageType="ns2:replyMessage"/>
+        <variable name="eCLEARS_sendRelationMonitor_InputVariable" messageType="ns2:requestRelationMessage"/>
+        <variable name="eCLEARS_sendRelationMonitor_OutputVariable" messageType="ns2:replyMessage"/>
+        <variable name="RMOLPath_getLogicalDirectory_InputVariable" messageType="ns3:getLogicalDirectoryRequestMessage"/>
+        <variable name="RMOLPath_getLogicalDirectory_OutputVariable" messageType="ns3:getLogicalDirectoryReplyMessage"/>
+        <variable name="RMOL_Write-RMOL_InputVariable" messageType="ns1:Write-RMOL_msg"/>
+        <variable name="RMOL_sendOutboundMonitor_InputVariable" messageType="ns2:requestOutboundMessage"/>
+        <variable name="RMOL_sendOutboundMonitor_OutputVariable" messageType="ns2:replyMessage"/>
+        <variable name="RMOL_sendRelationMonitor_InputVariable" messageType="ns2:requestRelationMessage"/>
+        <variable name="RMOL_sendRelationMonitor_OutputVariable" messageType="ns2:replyMessage"/>
+        <variable name="FITS_getLogicalDirectory_InputVariable" messageType="ns3:getLogicalDirectoryRequestMessage"/>
+        <variable name="FITS_getLogicalDirectory_OutputVariable" messageType="ns3:getLogicalDirectoryReplyMessage"/>
+        <variable name="FITS_Write-FITS_InputVariable" messageType="ns5:Write-FITS_msg"/>
+        <variable name="FITS_sendOutboundMonitor_InputVariable" messageType="ns2:requestOutboundMessage"/>
+        <variable name="FITS_sendOutboundMonitor_OutputVariable" messageType="ns2:replyMessage"/>
+        <variable name="FITS_sendRelationMonitor_InputVariable" messageType="ns2:requestRelationMessage"/>
+        <variable name="FITS_sendRelationMonitor_OutputVariable" messageType="ns2:replyMessage"/>
+        <variable name="Validator_sendToEclearsTradingLimit_InputVariable" messageType="ns11:sendToEclearsTradingLimit_msg"/>
+        <variable name="Validator_getLogicalDirectory_InputVariable" messageType="ns3:getLogicalDirectoryRequestMessage"/>
+        <variable name="Validator_getLogicalDirectory_OutputVariable" messageType="ns3:getLogicalDirectoryReplyMessage"/>
+        <variable name="Validator_Write-Validator_InputVariable" messageType="ns6:Write-Validator_msg"/>
+        <variable name="Validator_sendOutboundMonitor_InputVariable" messageType="ns2:requestOutboundMessage"/>
+        <variable name="Validator_sendOutboundMonitor_OutputVariable" messageType="ns2:replyMessage"/>
+        <variable name="Validator_sendRelationMonitor_InputVariable" messageType="ns2:requestRelationMessage"/>
+        <variable name="Validator_sendRelationMonitor_OutputVariable" messageType="ns2:replyMessage"/>
+      </variables>
+      <faultHandlers id="BpFhs0">
+        <catch faultName="bpelx:invalidVariables" id="BpCFt0">
+          <empty name="ignore_invalidVarErr" id="BpEmp0"/>
+        </catch>
+        <catchAll id="BpCAl0">
+          <empty name="ignore_allErr" id="BpEmp1"/>
+        </catchAll>
+      </faultHandlers>
+      <sequence name="Sequence_1" id="BpSeq1">
+        <bpelx:validate name="inputValidation" variables="inputVariable" id="BpVal0"/>
+        <sequence name="insertInbound" id="BpSeq2">
+          <assign name="a_inbound" id="BpAss0">
+            <copy>
+              <from expression="concat('messsageName=OR20-RQAZORTradingLimit|CompositeInstanceId=',ora:getCompositeInstanceId(),'|ComponentName=',ora:getComponentName(),'|','Description=TRading Limit telah berhasil diproses.')"/>
+              <to variable="inbound_sendInboundMonitor_InputVariable" part="request" query="/ns7:inboundMonitorRequest/ns7:inboundMonitor/ns7:description"/>
+            </copy>
+            <copy>
+              <from expression="'SUCCESS'"/>
+              <to variable="inbound_sendInboundMonitor_InputVariable" part="request" query="/ns7:inboundMonitorRequest/ns7:inboundMonitor/ns7:status"/>
+            </copy>
+            <copy>
+              <from expression="ora:countNodes('inputVariable','payload','/ns8:kpeiOutbound/ns8:body/ns8:response')"/>
+              <to variable="inbound_sendInboundMonitor_InputVariable" part="request" query="/ns7:inboundMonitorRequest/ns7:inboundMonitor/ns7:rowCount"/>
+            </copy>
+            <copy>
+              <from expression="bpws:getVariableData('inputVariable','payload','/ns8:kpeiOutbound/ns8:header/@id')"/>
+              <to variable="inbound_sendInboundMonitor_InputVariable" part="request" query="/ns7:inboundMonitorRequest/ns7:inboundMonitor/ns7:Filename"/>
+            </copy>
+            <copy>
+              <from variable="inputVariable" part="payload" query="/ns8:kpeiOutbound/ns8:header/ns8:asAt"/>
+              <to variable="inbound_sendInboundMonitor_InputVariable" part="request" query="/ns7:inboundMonitorRequest/ns7:inboundMonitor/ns7:ReceiveDate"/>
+            </copy>
+          </assign>
+          <invoke name="inbound" inputVariable="inbound_sendInboundMonitor_InputVariable" outputVariable="inbound_sendInboundMonitor_OutputVariable" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendInboundMonitor" id="BpInv0"/>
+        </sequence>
+        <flow name="create_msg" id="BpFlw0">
+          <sequence name="SKD" id="BpSeq3">
+            <assign name="t_SKD" id="BpAss1">
+              <bpelx:annotation>
+                <bpelx:pattern>transformation</bpelx:pattern>
+              </bpelx:annotation>
+              <copy>
+                <from expression="ora:processXSLT('xsl/SKD_transform.xsl',bpws:getVariableData('inputVariable','payload'))"/>
+                <to variable="SKDMsg"/>
+              </copy>
+            </assign>
+            <switch name="Switch_1" id="BpSwt0">
+              <case condition="ora:countNodes('SKDMsg','/ns18:TradingLimit/ns18:body/ns18:TradingLimitItem') > 0">
+                <sequence id="BpSeq4">
+                  <assign name="t_input_SKD" id="BpAss2">
+                    <bpelx:annotation>
+                      <bpelx:pattern>transformation</bpelx:pattern>
+                    </bpelx:annotation>
+                    <copy>
+                      <from expression="ora:processXSLT('xsl/t_input_SKD.xsl',bpws:getVariableData('SKDMsg'))"/>
+                      <to variable="SKD_Produce_Message_InputVariable" part="body"/>
+                    </copy>
+                  </assign>
+                  <invoke name="SKD" inputVariable="SKD_Produce_Message_InputVariable" partnerLink="TradingLimit" portType="ns21:Produce_Message_ptt" operation="Produce_Message" id="BpInv1"/>
+                </sequence>
+              </case>
+              <otherwise/>
+            </switch>
+          </sequence>
+          <sequence name="seq_atl" id="BpSeq5">
+            <scope name="sc_atl" variableAccessSerializable="no" id="BpScp1">
+              <faultHandlers id="BpFhs1">
+                <catchAll id="BpCAl1">
+                  <empty name="ignore" id="BpEmp3"/>
+                </catchAll>
+              </faultHandlers>
+              <sequence id="BpSeq6">
+                <assign name="tx_atl_in" id="BpAss3">
+                  <bpelx:annotation>
+                    <bpelx:pattern>transformation</bpelx:pattern>
+                  </bpelx:annotation>
+                  <copy>
+                    <from expression="ora:doXSLTransformForDoc('xsl/tx_atl_in.xsl', $inputVariable.payload)"/>
+                    <to variable="atlRequest" part="request"/>
+                  </copy>
+                </assign>
+                <switch name="Switch2" id="BpSwt1">
+                  <case condition="ora:countNodes('atlRequest','request','/ns15:kpeiOutbound/ns15:body/ns15:response') > 0">
+                    <sequence id="BpSeq7">
+                      <assign name="as_dateZ" id="BpAss4">
+                        <copy>
+                          <from expression="concat(xpath20:format-dateTime(string(bpws:getVariableData('atlRequest','request','/ns15:kpeiOutbound/ns15:header/ns15:asAt')),'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]'),'Z')"/>
+                          <to variable="atlRequest" part="request" query="/ns15:kpeiOutbound/ns15:header/ns15:asAt"/>
+                        </copy>
+                      </assign>
+                      <invoke name="inv_atl" inputVariable="atlRequest" outputVariable="atlReply" partnerLink="atl_ws" portType="ns14:execute_ptt" operation="setTradingLimit" bpelx:invokeAsDetail="no" id="BpInv2"/>
+                      <sequence name="seq_outbound" id="BpSeq8">
+                        <assign name="as_atl_outbound" id="BpAss5">
+                          <copy>
+                            <from expression="xpath20:current-dateTime()"/>
+                            <to variable="atlOutRequest" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:ReceiveDate"/>
+                          </copy>
+                          <copy>
+                            <from expression="'Sukses mengirimkan Allocated Trading Limit'"/>
+                            <to variable="atlOutRequest" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:description"/>
+                          </copy>
+                          <copy>
+                            <from variable="atlRequest" part="request" query="/ns15:kpeiOutbound/ns15:header/@id"/>
+                            <to variable="atlOutRequest" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:Filename"/>
+                          </copy>
+                          <copy>
+                            <from expression="ora:countNodes('atlRequest','request','/ns15:kpeiOutbound/ns15:body/ns15:response')"/>
+                            <to variable="atlOutRequest" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:rowCount"/>
+                          </copy>
+                          <copy>
+                            <from expression="'SUCCESS'"/>
+                            <to variable="atlOutRequest" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:status"/>
+                          </copy>
+                        </assign>
+                        <invoke name="inv_atl_outbound" inputVariable="atlOutRequest" outputVariable="atlOutReply" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendOutboundMonitor" bpelx:invokeAsDetail="no" id="BpInv3"/>
+                      </sequence>
+                      <sequence name="seq_relation" id="BpSeq9">
+                        <assign name="as_atl_relation" id="BpAss6">
+                          <copy>
+                            <from variable="atlOutReply" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                            <to variable="atlRelRequest" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:outboundID"/>
+                          </copy>
+                          <copy>
+                            <from variable="inbound_sendInboundMonitor_OutputVariable" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                            <to variable="atlRelRequest" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:inbounds/ns7:inboundID"/>
+                          </copy>
+                        </assign>
+                        <invoke name="inv_atl_relation" inputVariable="atlRelRequest" outputVariable="atlRelReply" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendRelationMonitor" bpelx:invokeAsDetail="no" id="BpInv4"/>
+                      </sequence>
+                    </sequence>
+                  </case>
+                  <otherwise>
+                    <empty name="nothing" id="BpEmp4"/>
+                  </otherwise>
+                </switch>
+              </sequence>
+            </scope>
+          </sequence>
+          <sequence name="MI" id="BpSeq10">
+            <scope name="sc_MI" variableAccessSerializable="no" id="BpScp2">
+              <faultHandlers id="BpFhs2">
+                <catchAll id="BpCAl2">
+                  <empty name="ignore" id="BpEmp5"/>
+                </catchAll>
+              </faultHandlers>
+              <sequence id="BpSeq11">
+                <assign name="tx_mi_in" id="BpAss7">
+                  <bpelx:annotation>
+                    <bpelx:pattern>transformation</bpelx:pattern>
+                  </bpelx:annotation>
+                  <copy>
+                    <from expression="ora:doXSLTransformForDoc('xsl/tx_mi_in.xsl', $inputVariable.payload)"/>
+                    <to variable="miRequest" part="parameters"/>
+                  </copy>
+                </assign>
+                <switch name="sw_count" id="BpSwt2">
+                  <case condition="ora:countNodes('miRequest','parameters','/ns13:SetClearingMemberLimit/ns13:body/ns13:clearingMemberLimitCollection/ns13:clearingMemberLimit') > 0">
+                    <sequence id="BpSeq12">
+                      <assign name="as_dateZ" id="BpAss8">
+                        <copy>
+                          <from expression="concat(xpath20:format-dateTime(string(bpws:getVariableData('miRequest','parameters','/ns13:SetClearingMemberLimit/ns13:header/ns13:asAt')),'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]'),'Z')"/>
+                          <to variable="miRequest" part="parameters" query="/ns13:SetClearingMemberLimit/ns13:header/ns13:asAt"/>
+                        </copy>
+                      </assign>
+                      <invoke name="inv_mi" inputVariable="miRequest" outputVariable="miReply" partnerLink="mi_ws" portType="ns13:MemberInterfaceServicesSoap" operation="SetClearingMemberLimit" bpelx:invokeAsDetail="no" id="BpInv5"/>
+                      <sequence name="seq_outbound" id="BpSeq13">
+                        <assign name="as_mi_outbound" id="BpAss9">
+                          <copy>
+                            <from expression="xpath20:current-dateTime()"/>
+                            <to variable="miOutRequest" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:ReceiveDate"/>
+                          </copy>
+                          <copy>
+                            <from expression="ora:countNodes('miRequest','parameters','/ns13:SetClearingMemberLimit/ns13:body/ns13:clearingMemberLimitCollection/ns13:clearingMemberLimit')"/>
+                            <to variable="miOutRequest" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:rowCount"/>
+                          </copy>
+                          <copy>
+                            <from variable="miRequest" part="parameters" query="/ns13:SetClearingMemberLimit/ns13:header/ns13:id"/>
+                            <to variable="miOutRequest" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:Filename"/>
+                          </copy>
+                          <copy>
+                            <from expression="'SUCCESS'"/>
+                            <to variable="miOutRequest" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:status"/>
+                          </copy>
+                          <copy>
+                            <from expression="'Sukses mengirimkan data ke MI'"/>
+                            <to variable="miOutRequest" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:description"/>
+                          </copy>
+                        </assign>
+                        <invoke name="inv_mi_outbound" inputVariable="miOutRequest" outputVariable="miOutReply" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendOutboundMonitor" bpelx:invokeAsDetail="no" id="BpInv6"/>
+                      </sequence>
+                      <sequence name="seq_relation" id="BpSeq14">
+                        <assign name="as_mi_relation" id="BpAss10">
+                          <copy>
+                            <from variable="miOutReply" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                            <to variable="miRelRequest" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:outboundID"/>
+                          </copy>
+                          <copy>
+                            <from variable="inbound_sendInboundMonitor_OutputVariable" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                            <to variable="miRelRequest" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:inbounds/ns7:inboundID"/>
+                          </copy>
+                        </assign>
+                        <invoke name="inv_mi_relation" inputVariable="miRelRequest" outputVariable="miRelReply" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendRelationMonitor" bpelx:invokeAsDetail="no" id="BpInv7"/>
+                      </sequence>
+                    </sequence>
+                  </case>
+                  <otherwise>
+                    <empty name="nothing" id="BpEmp6"/>
+                  </otherwise>
+                </switch>
+              </sequence>
+            </scope>
+          </sequence>
+          <sequence name="eCLEARS" id="BpSeq15">
+            <assign name="t_eclears" id="BpAss11">
+              <bpelx:annotation>
+                <bpelx:pattern>transformation</bpelx:pattern>
+              </bpelx:annotation>
+              <copy>
+                <from expression="ora:processXSLT('xsl/eclears_transform.xsl',bpws:getVariableData('inputVariable','payload'))"/>
+                <to variable="e-CLEARSMsg"/>
+              </copy>
+            </assign>
+            <switch name="sendeCLEARS" id="BpSwt3">
+              <case condition="ora:countNodes('e-CLEARSMsg','/ns9:kpeiOutbound/ns9:body/ns9:response') > 0">
+                <sequence id="BpSeq16">
+                  <assign name="a_eclears" id="BpAss12">
+                    <copy>
+                      <from variable="e-CLEARSMsg" query="/ns9:kpeiOutbound"/>
+                      <to variable="eCLEARS_sendToEclearsTradingLimit_InputVariable" part="body" query="/ns9:kpeiOutbound"/>
+                    </copy>
+                  </assign>
+                  <assign name="assignDateZ" id="BpAss13">
+                    <copy>
+                      <from expression="concat(xpath20:format-dateTime(string(bpws:getVariableData('eCLEARS_sendToEclearsTradingLimit_InputVariable','body','/ns9:kpeiOutbound/ns9:header/ns9:asAt')),'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]'),'Z')"/>
+                      <to variable="eCLEARS_sendToEclearsTradingLimit_InputVariable" part="body" query="/ns9:kpeiOutbound/ns9:header/ns9:asAt"/>
+                    </copy>
+                  </assign>
+                  <invoke name="eCLEARS" inputVariable="eCLEARS_sendToEclearsTradingLimit_InputVariable" partnerLink="eCLEARS_TradingLimit" portType="ns11:sendToEclearsTradingLimit_ptt" operation="sendToEclearsTradingLimit" id="BpInv8"/>
+                  <sequence name="sendOutbound" id="BpSeq17">
+                    <assign name="eCLEARSOutbound" id="BpAss14">
+                      <copy>
+                        <from expression="xpath20:current-dateTime()"/>
+                        <to variable="eCLEARS_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:ReceiveDate"/>
+                      </copy>
+                      <copy>
+                        <from variable="e-CLEARSMsg" query="/ns9:kpeiOutbound/ns9:header/@id"/>
+                        <to variable="eCLEARS_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:Filename"/>
+                      </copy>
+                      <copy>
+                        <from expression="ora:countNodes('e-CLEARSMsg','/ns9:kpeiOutbound/ns9:body/ns9:response')"/>
+                        <to variable="eCLEARS_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:rowCount"/>
+                      </copy>
+                      <copy>
+                        <from expression="'SUCCESS'"/>
+                        <to variable="eCLEARS_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:status"/>
+                      </copy>
+                      <copy>
+                        <from expression="'Sukses mengirimkan message ke e-CLEARS.'"/>
+                        <to variable="eCLEARS_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:description"/>
+                      </copy>
+                    </assign>
+                    <invoke name="eCLEARS" inputVariable="eCLEARS_sendOutboundMonitor_InputVariable" outputVariable="eCLEARS_sendOutboundMonitor_OutputVariable" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendOutboundMonitor" id="BpInv9"/>
+                  </sequence>
+                  <sequence name="sendRelation" id="BpSeq18">
+                    <assign name="eCLEARS_Relation" id="BpAss15">
+                      <copy>
+                        <from variable="eCLEARS_sendOutboundMonitor_OutputVariable" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                        <to variable="eCLEARS_sendRelationMonitor_InputVariable" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:outboundID"/>
+                      </copy>
+                      <copy>
+                        <from variable="inbound_sendInboundMonitor_OutputVariable" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                        <to variable="eCLEARS_sendRelationMonitor_InputVariable" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:inbounds/ns7:inboundID"/>
+                      </copy>
+                    </assign>
+                    <invoke name="eCLEARS" inputVariable="eCLEARS_sendRelationMonitor_InputVariable" outputVariable="eCLEARS_sendRelationMonitor_OutputVariable" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendRelationMonitor" id="BpInv10"/>
+                  </sequence>
+                </sequence>
+              </case>
+              <otherwise>
+                <empty name="Nothing" id="BpEmp7"/>
+              </otherwise>
+            </switch>
+          </sequence>
+          <sequence name="RMOL" id="BpSeq19">
+            <assign name="t_RMOL" id="BpAss16">
+              <bpelx:annotation>
+                <bpelx:pattern>transformation</bpelx:pattern>
+              </bpelx:annotation>
+              <copy>
+                <from expression="ora:processXSLT('xsl/RMOL_transformation.xsl',bpws:getVariableData('inputVariable','payload'))"/>
+                <to variable="RMOLMsg"/>
+              </copy>
+            </assign>
+            <switch name="sendRMOL" id="BpSwt4">
+              <case condition="ora:countNodes('RMOLMsg','/ns10:records/ns10:record') > 0">
+                <sequence id="BpSeq20">
+                  <assign name="RMOL_filename" id="BpAss17">
+                    <copy>
+                      <from expression="string(ora:getCurrentDateTime(&quot;yyyyMMddHHmmssSSS'_tradingLimit_RMOL.txt'&quot;))"/>
+                      <to variable="RMOL_filename"/>
+                    </copy>
+                  </assign>
+                  <assign name="a_RMOLPath" id="BpAss18">
+                    <copy>
+                      <from expression="'tradingLimit_rmol'"/>
+                      <to variable="RMOLPath_getLogicalDirectory_InputVariable" part="request" query="/ns12:getLogicalDirectoryRequest/ns12:logicalDirectoryName"/>
+                    </copy>
+                  </assign>
+                  <invoke name="RMOLPath" inputVariable="RMOLPath_getLogicalDirectory_InputVariable" outputVariable="RMOLPath_getLogicalDirectory_OutputVariable" partnerLink="GE03-XMLUtility" portType="ns3:GE03-XMLUtility" operation="getLogicalDirectory" id="BpInv11"/>
+                  <assign name="a_RMOL" id="BpAss19">
+                    <copy>
+                      <from variable="RMOLMsg" query="/ns10:records"/>
+                      <to variable="RMOL_Write-RMOL_InputVariable" part="body" query="/ns10:records"/>
+                    </copy>
+                  </assign>
+                  <invoke name="RMOL" inputVariable="RMOL_Write-RMOL_InputVariable" partnerLink="RMOL_write" portType="ns1:Write_RMOL_ptt" operation="Write-RMOL" id="BpInv12">
+                    <bpelx:inputProperty name="jca.file.FileName" variable="RMOL_filename"/>
+                    <bpelx:inputProperty name="jca.file.Directory" variable="RMOLPath_getLogicalDirectory_OutputVariable" part="reply" query="/ns12:getLogicalDirectoryReply/ns12:logicalDirectory/ns12:physicalPath"/>
+                  </invoke>
+                  <sequence name="sendOutbound" id="BpSeq21">
+                    <assign name="a_RMOLOutbond" id="BpAss20">
+                      <copy>
+                        <from expression="xpath20:current-dateTime()"/>
+                        <to variable="RMOL_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:ReceiveDate"/>
+                      </copy>
+                      <copy>
+                        <from expression="substring-before(string(bpws:getVariableData('RMOL_filename')),'.txt')"/>
+                        <to variable="RMOL_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:Filename"/>
+                      </copy>
+                      <copy>
+                        <from expression="ora:countNodes('RMOLMsg','/ns10:records/ns10:record')"/>
+                        <to variable="RMOL_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:rowCount"/>
+                      </copy>
+                      <copy>
+                        <from expression="'SUCCESS'"/>
+                        <to variable="RMOL_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:status"/>
+                      </copy>
+                      <copy>
+                        <from expression="'Sukses mengirimkan message.'"/>
+                        <to variable="RMOL_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:description"/>
+                      </copy>
+                    </assign>
+                    <invoke name="RMOL" inputVariable="RMOL_sendOutboundMonitor_InputVariable" outputVariable="RMOL_sendOutboundMonitor_OutputVariable" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendOutboundMonitor" id="BpInv13"/>
+                  </sequence>
+                  <sequence name="sendRelation" id="BpSeq22">
+                    <assign name="a_RMOLRelation" id="BpAss21">
+                      <copy>
+                        <from variable="RMOL_sendOutboundMonitor_OutputVariable" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                        <to variable="RMOL_sendRelationMonitor_InputVariable" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:outboundID"/>
+                      </copy>
+                      <copy>
+                        <from variable="inbound_sendInboundMonitor_OutputVariable" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                        <to variable="RMOL_sendRelationMonitor_InputVariable" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:inbounds/ns7:inboundID"/>
+                      </copy>
+                    </assign>
+                    <invoke name="RMOL" inputVariable="RMOL_sendRelationMonitor_InputVariable" outputVariable="RMOL_sendRelationMonitor_OutputVariable" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendRelationMonitor" id="BpInv14"/>
+                  </sequence>
+                </sequence>
+              </case>
+              <otherwise>
+                <empty name="Nothing" id="BpEmp8"/>
+              </otherwise>
+            </switch>
+          </sequence>
+          <sequence name="FITS" id="BpSeq23">
+            <assign name="t_FITS" id="BpAss22">
+              <bpelx:annotation>
+                <bpelx:pattern>transformation</bpelx:pattern>
+              </bpelx:annotation>
+              <copy>
+                <from expression="ora:processXSLT('xsl/FITS_transform.xsl',bpws:getVariableData('inputVariable','payload'))"/>
+                <to variable="FITSMsg"/>
+              </copy>
+            </assign>
+            <switch name="sendFITS" id="BpSwt5">
+              <case condition="ora:countNodes('FITSMsg','/ns9:kpeiOutbound/ns9:body/ns9:response') > 0">
+                <sequence id="BpSeq24">
+                  <assign name="FITS_filename" id="BpAss23">
+                    <copy>
+                      <from expression="string(ora:getCurrentDateTime(&quot;yyyyMMddHHmmssSSS'_tradingLimit_FITS.xml'&quot;))"/>
+                      <to variable="FITS_filename"/>
+                    </copy>
+                    <copy>
+                      <from expression="substring-before(string(bpws:getVariableData('FITS_filename')),'.xml')"/>
+                      <to variable="FITSMsg" query="/ns9:kpeiOutbound/ns9:header/@id"/>
+                    </copy>
+                  </assign>
+                  <assign name="a_FITSPath" id="BpAss24">
+                    <copy>
+                      <from expression="'tradingLimit_fits'"/>
+                      <to variable="FITS_getLogicalDirectory_InputVariable" part="request" query="/ns12:getLogicalDirectoryRequest/ns12:logicalDirectoryName"/>
+                    </copy>
+                  </assign>
+                  <invoke name="FITSPath" inputVariable="FITS_getLogicalDirectory_InputVariable" outputVariable="FITS_getLogicalDirectory_OutputVariable" partnerLink="GE03-XMLUtility" portType="ns3:GE03-XMLUtility" operation="getLogicalDirectory" id="BpInv15"/>
+                  <assign name="a_FITS" id="BpAss25">
+                    <copy>
+                      <from variable="FITSMsg" query="/ns9:kpeiOutbound"/>
+                      <to variable="FITS_Write-FITS_InputVariable" part="body" query="/ns9:kpeiOutbound"/>
+                    </copy>
+                  </assign>
+                  <assign name="assigndateZ" id="BpAss26">
+                    <copy>
+                      <from expression="concat(xpath20:format-dateTime(string(bpws:getVariableData('FITS_Write-FITS_InputVariable','body','/ns9:kpeiOutbound/ns9:header/ns9:asAt')),'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]'),'Z')"/>
+                      <to variable="FITS_Write-FITS_InputVariable" part="body" query="/ns9:kpeiOutbound/ns9:header/ns9:asAt"/>
+                    </copy>
+                  </assign>
+                  <invoke name="FITS" inputVariable="FITS_Write-FITS_InputVariable" partnerLink="FITS_write" portType="ns5:Write_FITS_ptt" operation="Write-FITS" id="BpInv16">
+                    <bpelx:inputProperty name="jca.file.Directory" variable="FITS_getLogicalDirectory_OutputVariable" part="reply" query="/ns12:getLogicalDirectoryReply/ns12:logicalDirectory/ns12:physicalPath"/>
+                    <bpelx:inputProperty name="jca.file.FileName" variable="FITS_filename"/>
+                  </invoke>
+                  <sequence name="sendOutbound" id="BpSeq25">
+                    <assign name="a_FITSOutbound" id="BpAss27">
+                      <copy>
+                        <from expression="xpath20:current-dateTime()"/>
+                        <to variable="FITS_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:ReceiveDate"/>
+                      </copy>
+                      <copy>
+                        <from expression="substring-before(string(bpws:getVariableData('FITS_filename')),'.xml')"/>
+                        <to variable="FITS_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:Filename"/>
+                      </copy>
+                      <copy>
+                        <from expression="ora:countNodes('FITSMsg','/ns9:kpeiOutbound/ns9:body/ns9:response')"/>
+                        <to variable="FITS_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:rowCount"/>
+                      </copy>
+                      <copy>
+                        <from expression="'SUCCESS'"/>
+                        <to variable="FITS_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:status"/>
+                      </copy>
+                      <copy>
+                        <from expression="'Sukses mengirimkan file message.'"/>
+                        <to variable="FITS_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:description"/>
+                      </copy>
+                    </assign>
+                    <invoke name="FITSOutbound" inputVariable="FITS_sendOutboundMonitor_InputVariable" outputVariable="FITS_sendOutboundMonitor_OutputVariable" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendOutboundMonitor" id="BpInv17"/>
+                  </sequence>
+                  <sequence name="sendRelation" id="BpSeq26">
+                    <assign name="a_FITSRelation" id="BpAss28">
+                      <copy>
+                        <from variable="FITS_sendOutboundMonitor_OutputVariable" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                        <to variable="FITS_sendRelationMonitor_InputVariable" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:outboundID"/>
+                      </copy>
+                      <copy>
+                        <from variable="inbound_sendInboundMonitor_OutputVariable" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                        <to variable="FITS_sendRelationMonitor_InputVariable" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:inbounds/ns7:inboundID"/>
+                      </copy>
+                    </assign>
+                    <invoke name="a_FITSRelation" inputVariable="FITS_sendRelationMonitor_InputVariable" outputVariable="FITS_sendRelationMonitor_OutputVariable" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendRelationMonitor" id="BpInv18"/>
+                  </sequence>
+                </sequence>
+              </case>
+              <otherwise>
+                <empty name="Nothing" id="BpEmp9"/>
+              </otherwise>
+            </switch>
+          </sequence>
+          <sequence name="validator" id="BpSeq27">
+            <assign name="t_Validator" id="BpAss29">
+              <bpelx:annotation>
+                <bpelx:pattern>transformation</bpelx:pattern>
+              </bpelx:annotation>
+              <copy>
+                <from expression="ora:processXSLT('xsl/Validator_Transform.xsl',bpws:getVariableData('inputVariable','payload'))"/>
+                <to variable="validator_msg"/>
+              </copy>
+            </assign>
+            <switch name="sendValidator" id="BpSwt6">
+              <case condition="ora:countNodes('validator_msg','/ns9:kpeiOutbound/ns9:body/ns9:response') > 0">
+                <sequence id="BpSeq28">
+                  <assign name="validator_filename" id="BpAss30">
+                    <copy>
+                      <from expression="string(ora:getCurrentDateTime(&quot;yyyyMMddHHmmssSSS'_tradingLimit_validator.xml'&quot;))"/>
+                      <to variable="Validator_filename"/>
+                    </copy>
+                    <copy>
+                      <from expression="substring-before(string(bpws:getVariableData('Validator_filename')),'.xml')"/>
+                      <to variable="validator_msg" query="/ns9:kpeiOutbound/ns9:header/@id"/>
+                    </copy>
+                  </assign>
+                  <assign name="a_validatorPath" id="BpAss31">
+                    <copy>
+                      <from expression="'tradingLimit_validator'"/>
+                      <to variable="Validator_getLogicalDirectory_InputVariable" part="request" query="/ns12:getLogicalDirectoryRequest/ns12:logicalDirectoryName"/>
+                    </copy>
+                  </assign>
+                  <invoke name="ValidatorPath" inputVariable="Validator_getLogicalDirectory_InputVariable" outputVariable="Validator_getLogicalDirectory_OutputVariable" partnerLink="GE03-XMLUtility" portType="ns3:GE03-XMLUtility" operation="getLogicalDirectory" id="BpInv19"/>
+                  <assign name="a_validatorSend" id="BpAss32">
+                    <copy>
+                      <from variable="validator_msg" query="/ns9:kpeiOutbound"/>
+                      <to variable="Validator_Write-Validator_InputVariable" part="body" query="/ns9:kpeiOutbound"/>
+                    </copy>
+                  </assign>
+                  <assign name="assignDateZ" id="BpAss33">
+                    <copy>
+                      <from expression="concat(xpath20:format-dateTime(string(bpws:getVariableData('Validator_sendToEclearsTradingLimit_InputVariable','body','/ns9:kpeiOutbound/ns9:header/ns9:asAt')),'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]'),'Z')"/>
+                      <to variable="Validator_sendToEclearsTradingLimit_InputVariable" part="body" query="/ns9:kpeiOutbound/ns9:header/ns9:asAt"/>
+                    </copy>
+                  </assign>
+                  <invoke name="Validator" inputVariable="Validator_Write-Validator_InputVariable" partnerLink="Validator_write" portType="ns6:Write_Validator_ptt" operation="Write-Validator" id="BpInv20">
+                    <bpelx:inputProperty name="jca.file.Directory" variable="Validator_getLogicalDirectory_OutputVariable" part="reply" query="/ns12:getLogicalDirectoryReply/ns12:logicalDirectory/ns12:physicalPath"/>
+                    <bpelx:inputProperty name="jca.file.FileName" variable="Validator_filename"/>
+                  </invoke>
+                  <sequence name="sendOutbound" id="BpSeq29">
+                    <assign name="a_validatorOutbound" id="BpAss34">
+                      <copy>
+                        <from expression="xpath20:current-dateTime()"/>
+                        <to variable="Validator_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:ReceiveDate"/>
+                      </copy>
+                      <copy>
+                        <from expression="substring-before(string(bpws:getVariableData('Validator_filename')),'.xml')"/>
+                        <to variable="Validator_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:Filename"/>
+                      </copy>
+                      <copy>
+                        <from expression="ora:countNodes('validator_msg','/ns9:kpeiOutbound/ns9:body/ns9:response')"/>
+                        <to variable="Validator_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:rowCount"/>
+                      </copy>
+                      <copy>
+                        <from expression="'SUCCESS'"/>
+                        <to variable="Validator_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:status"/>
+                      </copy>
+                      <copy>
+                        <from expression="'Sukses mengirimkan message.'"/>
+                        <to variable="Validator_sendOutboundMonitor_InputVariable" part="request" query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:description"/>
+                      </copy>
+                    </assign>
+                    <invoke name="ValidatorOutbound" inputVariable="Validator_sendOutboundMonitor_InputVariable" outputVariable="Validator_sendOutboundMonitor_OutputVariable" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendOutboundMonitor" id="BpInv21"/>
+                  </sequence>
+                  <sequence name="sendRelation" id="BpSeq30">
+                    <assign name="a_validatorRelation" id="BpAss35">
+                      <copy>
+                        <from variable="Validator_sendOutboundMonitor_OutputVariable" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                        <to variable="Validator_sendRelationMonitor_InputVariable" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:outboundID"/>
+                      </copy>
+                      <copy>
+                        <from variable="inbound_sendInboundMonitor_OutputVariable" part="reply" query="/ns7:replyWS/ns7:lastId"/>
+                        <to variable="Validator_sendRelationMonitor_InputVariable" part="request" query="/ns7:relationMonitorRequest/ns7:relationMonitor/ns7:inbounds/ns7:inboundID"/>
+                      </copy>
+                    </assign>
+                    <invoke name="ValidatorRelation" inputVariable="Validator_sendRelationMonitor_InputVariable" outputVariable="Validator_sendRelationMonitor_OutputVariable" partnerLink="GE01-MessageMonitor" portType="ns2:messageMonitor" operation="sendRelationMonitor" id="BpInv22"/>
+                  </sequence>
+                </sequence>
+              </case>
+              <otherwise>
+                <empty name="Nothing" id="BpEmp10"/>
+              </otherwise>
+            </switch>
+          </sequence>
+        </flow>
+      </sequence>
+    </scope>
+  </sequence>
+</process><!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Wed Apr 07 10:30:19 ICT 2010
+  Author:  medisagn64
+  Purpose: One Way BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->

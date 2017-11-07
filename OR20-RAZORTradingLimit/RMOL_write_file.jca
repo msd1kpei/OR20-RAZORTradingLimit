@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<adapter-config name="RMOL_write" adapter="File Adapter" wsdlLocation="RMOL_write.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+   <connection-factory location="eis/FileAdapter" adapterRef=""/>
+   <endpoint-interaction portType="Write_RMOL_ptt" operation="Write-RMOL">
+      <interaction-spec className="oracle.tip.adapter.file.outbound.FileInteractionSpec">
+         <property name="PhysicalDirectory" value="c:\"/>
+         <property name="FileNamingConvention" value="change_on_the_fly_rmol"/>
+         <property name="Append" value="false"/>
+         <property name="NumberMessages" value="1"/>
+      </interaction-spec>
+   </endpoint-interaction>
+</adapter-config>
