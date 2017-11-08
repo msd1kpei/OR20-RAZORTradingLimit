@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.kpei.co.id/schema/TradingLimit" xmlns:ns1="http://www.kpei.co.id/schema/Header" xmlns:ns2="http://www.kpei.co.id/schema/Extension" targetNamespace="http://www.kpei.co.id/schema/TradingLimit" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <xsd:import namespace="http://www.kpei.co.id/schema/Header" schemaLocation="Header.xsd"/>
+   <xsd:import namespace="http://www.kpei.co.id/schema/Extension" schemaLocation="Extension.xsd"/>
+   <xsd:element name="TradingLimit">
+      <xsd:annotation>
+         <xsd:documentation>Comment describing your root element</xsd:documentation>
+      </xsd:annotation>
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="header" type="ns1:Header"/>
+            <xsd:element name="body" type="TradingLimitCollections"/>
+            <xsd:element name="ext" type="ns2:Extension" minOccurs="0"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+   <xsd:complexType name="TradingLimitCollections">
+      <xsd:sequence>
+         <xsd:element name="TradingLimitItem" type="TradingLimitItem" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="TradingLimitItem">
+      <xsd:sequence>
+         <xsd:element name="firmId" type="xsd:string"/>
+         <xsd:element name="market" type="xsd:string"/>
+         <xsd:element name="value" type="xsd:decimal" minOccurs="0"/>
+         <xsd:element name="clientList" type="ClientListCollections" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="ClientListCollections">
+      <xsd:sequence>
+         <xsd:element name="client" type="ClientItem" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="ClientItem">
+      <xsd:sequence>
+         <xsd:element name="SID" type="xsd:string"/>
+         <xsd:element name="value" type="xsd:decimal"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

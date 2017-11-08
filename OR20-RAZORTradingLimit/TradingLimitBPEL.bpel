@@ -50,7 +50,11 @@
          xmlns:ns18="http://www.kpei.co.id/schema/TradingLimit"
          xmlns:ns19="http://www.kpei.co.id/schema/Header"
          xmlns:ns20="http://www.kpei.co.id/schema/Extension"
-         xmlns:ns21="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/TradingLimit">
+         xmlns:ns21="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/TradingLimit"
+         xmlns:ns22="http://xmlns.oracle.com/MW-OSB/TradingLimit/TradingLimit"
+         xmlns:ns23="http://www.kpei.co.id/schema/TradingLimit.001"
+         xmlns:ns24="http://xmlns.oracle.com/tokenLoginapp/MessageGateway/MessageGateway"
+         xmlns:ns25="http://www.kpei.co.id/schema/MessageGatewayv0.1">
   <!-- 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       PARTNERLINKS                                                      
@@ -78,15 +82,14 @@
                  partnerLinkType="ns5:Write_FITS_plt"/>
     <partnerLink name="Validator_write" partnerRole="Write-Validator_role"
                  partnerLinkType="ns6:Write_Validator_plt"/>
-    <partnerLink name="eCLEARS_TradingLimit"
-                 partnerRole="sendToEclearsTradingLimit_role"
-                 partnerLinkType="ns11:sendToEclearsTradingLimit_plt"/>
     <partnerLink name="mi_ws" partnerLinkType="ns13:mi_ws"
                  partnerRole="MemberInterfaceServicesSoap"/>
     <partnerLink name="atl_ws" partnerLinkType="ns14:atl_ws"
                  partnerRole="execute_ptt"/>
     <partnerLink name="TradingLimit" partnerRole="Produce_Message_role"
                  partnerLinkType="ns21:Produce_Message_plt"/>
+    <partnerLink name="SendTL_Outbound" partnerLinkType="ns24:SendTL_Outbound"
+                 partnerRole="sendMessage_ptt"/>
   </partnerLinks>
   <!-- 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +102,6 @@
     <variable name="inputVariable"
               messageType="client:TradingLimitBPELRequestMessage"/>
     <variable name="validator_msg" element="ns9:kpeiOutbound"/>
-    <variable name="e-CLEARSMsg" element="ns9:kpeiOutbound"/>
     <variable name="FITSMsg" element="ns9:kpeiOutbound"/>
     <variable name="RMOLMsg" element="ns10:records"/>
     <variable name="RMOL_filename" type="xsd:string"/>
@@ -121,6 +123,9 @@
     <variable name="SKDMsg" element="ns18:TradingLimit"/>
     <variable name="SKD_Produce_Message_InputVariable"
               messageType="ns21:Produce_Message_msg"/>
+    <variable name="sendTL_Outbound_in" messageType="ns24:requestMessage"/>
+    <variable name="sendTL_Outbound_out" messageType="ns24:responseMessage"/>
+    <variable name="e-CLEARSMsg" element="ns23:kpeiOutbound"/>
   </variables>
   <!-- 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,8 +145,6 @@
                   messageType="ns2:requestInboundMessage"/>
         <variable name="inbound_sendInboundMonitor_OutputVariable"
                   messageType="ns2:replyMessage"/>
-        <variable name="eCLEARS_sendToEclearsTradingLimit_InputVariable"
-                  messageType="ns11:sendToEclearsTradingLimit_msg"/>
         <variable name="eCLEARS_sendOutboundMonitor_InputVariable"
                   messageType="ns2:requestOutboundMessage"/>
         <variable name="eCLEARS_sendOutboundMonitor_OutputVariable"
@@ -178,8 +181,6 @@
                   messageType="ns2:requestRelationMessage"/>
         <variable name="FITS_sendRelationMonitor_OutputVariable"
                   messageType="ns2:replyMessage"/>
-        <variable name="Validator_sendToEclearsTradingLimit_InputVariable"
-                  messageType="ns11:sendToEclearsTradingLimit_msg"/>
         <variable name="Validator_getLogicalDirectory_InputVariable"
                   messageType="ns3:getLogicalDirectoryRequestMessage"/>
         <variable name="Validator_getLogicalDirectory_OutputVariable"
@@ -247,37 +248,56 @@
         </sequence>
         <flow name="create_msg">
           <sequence name="SKD">
-            <assign name="t_SKD">
+            <scope name="sc_skd" variableAccessSerializable="no">
               <bpelx:annotation>
-                <bpelx:pattern>transformation</bpelx:pattern>
+                <bpelx:general>
+                  <bpelx:property name="userLabel">sc_skd</bpelx:property>
+                </bpelx:general>
               </bpelx:annotation>
-              <copy>
-                <from expression="ora:processXSLT('xsl/SKD_transform.xsl',bpws:getVariableData('inputVariable','payload'))"/>
-                <to variable="SKDMsg"/>
-              </copy>
-            </assign>
-            <switch name="Switch_1">
-              <case condition="ora:countNodes('SKDMsg','/ns18:TradingLimit/ns18:body/ns18:TradingLimitItem') > 0">
-                <sequence>
-                  <assign name="t_input_SKD">
-                    <bpelx:annotation>
-                      <bpelx:pattern>transformation</bpelx:pattern>
-                    </bpelx:annotation>
-                    <copy>
-                      <from expression="ora:processXSLT('xsl/t_input_SKD.xsl',bpws:getVariableData('SKDMsg'))"/>
-                      <to variable="SKD_Produce_Message_InputVariable"
-                          part="body"/>
-                    </copy>
-                  </assign>
-                  <invoke name="SKD"
-                          inputVariable="SKD_Produce_Message_InputVariable"
-                          partnerLink="TradingLimit"
-                          portType="ns21:Produce_Message_ptt"
-                          operation="Produce_Message"/>
-                </sequence>
-              </case>
-              <otherwise/>
-            </switch>
+              <variables>
+                <variable name="skipVar" type="xsd:int"/>
+              </variables>
+              <sequence>
+                <assign name="t_SKD">
+                  <bpelx:annotation>
+                    <bpelx:pattern>transformation</bpelx:pattern>
+                  </bpelx:annotation>
+                  <copy>
+                    <from expression="ora:processXSLT('xsl/SKD_transform.xsl',bpws:getVariableData('inputVariable','payload'))"/>
+                    <to variable="SKDMsg"/>
+                  </copy>
+                </assign>
+                <assign name="a_skipVar">
+                  <copy>
+                    <from expression="1"/>
+                    <to variable="skipVar"/>
+                  </copy>
+                </assign>
+                <switch name="if_tl"
+                        bpelx:skipCondition="bpws:getVariableData('skipVar') = 1">
+                  <case condition="ora:countNodes('SKDMsg','/ns18:TradingLimit/ns18:body/ns18:TradingLimitItem') > 0">
+                    <sequence>
+                      <assign name="t_input_SKD">
+                        <bpelx:annotation>
+                          <bpelx:pattern>transformation</bpelx:pattern>
+                        </bpelx:annotation>
+                        <copy>
+                          <from expression="ora:processXSLT('xsl/t_input_SKD.xsl',bpws:getVariableData('SKDMsg'))"/>
+                          <to variable="SKD_Produce_Message_InputVariable"
+                              part="body"/>
+                        </copy>
+                      </assign>
+                      <invoke name="SKD"
+                              inputVariable="SKD_Produce_Message_InputVariable"
+                              partnerLink="TradingLimit"
+                              portType="ns21:Produce_Message_ptt"
+                              operation="Produce_Message"/>
+                    </sequence>
+                  </case>
+                  <otherwise/>
+                </switch>
+              </sequence>
+            </scope>
           </sequence>
           <sequence name="seq_atl">
             <scope name="sc_atl" variableAccessSerializable="no">
@@ -482,38 +502,45 @@
             </scope>
           </sequence>
           <sequence name="eCLEARS">
-            <assign name="t_eclears">
+            <assign name="t_eclearsmsg">
               <bpelx:annotation>
                 <bpelx:pattern>transformation</bpelx:pattern>
               </bpelx:annotation>
               <copy>
-                <from expression="ora:processXSLT('xsl/eclears_transform.xsl',bpws:getVariableData('inputVariable','payload'))"/>
+                <from expression="ora:doXSLTransformForDoc('xsl/eclearsmsg_transform1.xsl', $inputVariable.payload)"/>
+                <to variable="e-CLEARSMsg"/>
+              </copy>
+            </assign>
+            <assign name="t_eclears" bpelx:skipCondition="true()">
+              <bpelx:annotation>
+                <bpelx:pattern>transformation</bpelx:pattern>
+              </bpelx:annotation>
+              <copy>
+                <from expression="ora:doXSLTransformForDoc('xsl/eclears_transform1.xsl', $inputVariable.payload)"/>
                 <to variable="e-CLEARSMsg"/>
               </copy>
             </assign>
             <switch name="sendeCLEARS">
-              <case condition="ora:countNodes('e-CLEARSMsg','/ns9:kpeiOutbound/ns9:body/ns9:response') > 0">
+              <case condition="ora:countNodes('e-CLEARSMsg','/ns23:kpeiOutbound/ns23:body/ns23:response') > 0">
                 <sequence>
                   <assign name="a_eclears">
                     <copy>
-                      <from variable="e-CLEARSMsg" query="/ns9:kpeiOutbound"/>
-                      <to variable="eCLEARS_sendToEclearsTradingLimit_InputVariable"
-                          part="body" query="/ns9:kpeiOutbound"/>
+                      <from expression='"MESG011011"'/>
+                      <to variable="sendTL_Outbound_in" part="part1"
+                          query="/ns25:MessageGateway/ns25:serviceId"/>
                     </copy>
-                  </assign>
-                  <assign name="assignDateZ">
                     <copy>
-                      <from expression="concat(xpath20:format-dateTime(string(bpws:getVariableData('eCLEARS_sendToEclearsTradingLimit_InputVariable','body','/ns9:kpeiOutbound/ns9:header/ns9:asAt')),'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]'),'Z')"/>
-                      <to variable="eCLEARS_sendToEclearsTradingLimit_InputVariable"
-                          part="body"
-                          query="/ns9:kpeiOutbound/ns9:header/ns9:asAt"/>
+                      <from variable="e-CLEARSMsg" query="/ns23:kpeiOutbound"/>
+                      <to variable="sendTL_Outbound_in" part="part1"
+                          query="/ns25:MessageGateway/ns25:xmlData"/>
                     </copy>
                   </assign>
-                  <invoke name="eCLEARS"
-                          inputVariable="eCLEARS_sendToEclearsTradingLimit_InputVariable"
-                          partnerLink="eCLEARS_TradingLimit"
-                          portType="ns11:sendToEclearsTradingLimit_ptt"
-                          operation="sendToEclearsTradingLimit"/>
+                  <invoke name="sendTL_Outbound" bpelx:invokeAsDetail="no"
+                          inputVariable="sendTL_Outbound_in"
+                          outputVariable="sendTL_Outbound_out"
+                          partnerLink="SendTL_Outbound"
+                          portType="ns24:sendMessage_ptt"
+                          operation="sendMessage"/>
                   <sequence name="sendOutbound">
                     <assign name="eCLEARSOutbound">
                       <copy>
@@ -524,13 +551,13 @@
                       </copy>
                       <copy>
                         <from variable="e-CLEARSMsg"
-                              query="/ns9:kpeiOutbound/ns9:header/@id"/>
+                              query="/ns23:kpeiOutbound/ns23:header/@id"/>
                         <to variable="eCLEARS_sendOutboundMonitor_InputVariable"
                             part="request"
                             query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:Filename"/>
                       </copy>
                       <copy>
-                        <from expression="ora:countNodes('e-CLEARSMsg','/ns9:kpeiOutbound/ns9:body/ns9:response')"/>
+                        <from expression="ora:countNodes('e-CLEARSMsg','/ns23:kpeiOutbound/ns23:body/ns23:response')"/>
                         <to variable="eCLEARS_sendOutboundMonitor_InputVariable"
                             part="request"
                             query="/ns7:outboundMonitorRequest/ns7:outboundMonitor/ns7:rowCount"/>
@@ -885,14 +912,6 @@
                       <from variable="validator_msg" query="/ns9:kpeiOutbound"/>
                       <to variable="Validator_Write-Validator_InputVariable"
                           part="body" query="/ns9:kpeiOutbound"/>
-                    </copy>
-                  </assign>
-                  <assign name="assignDateZ">
-                    <copy>
-                      <from expression="concat(xpath20:format-dateTime(string(bpws:getVariableData('Validator_sendToEclearsTradingLimit_InputVariable','body','/ns9:kpeiOutbound/ns9:header/ns9:asAt')),'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]'),'Z')"/>
-                      <to variable="Validator_sendToEclearsTradingLimit_InputVariable"
-                          part="body"
-                          query="/ns9:kpeiOutbound/ns9:header/ns9:asAt"/>
                     </copy>
                   </assign>
                   <invoke name="Validator"

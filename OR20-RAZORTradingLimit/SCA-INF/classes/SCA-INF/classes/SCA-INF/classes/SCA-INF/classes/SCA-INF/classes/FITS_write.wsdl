@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="FITS_write" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/FITS_write" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/FITS_write" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:imp1="http://www.kpei.co.id/middleware/outbound/tradingLimit" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+   <plt:partnerLinkType name="Write_FITS_plt">
+      <plt:role name="Write-FITS_role">
+         <plt:portType name="tns:Write_FITS_ptt"/>
+      </plt:role>
+   </plt:partnerLinkType>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <import namespace="http://www.kpei.co.id/middleware/outbound/tradingLimit" schemaLocation="xsd/tradingLimit-response.xsd"/>
+      </schema>
+   </wsdl:types>
+   <wsdl:message name="Write-FITS_msg">
+      <wsdl:part name="body" element="imp1:kpeiOutbound"/>
+   </wsdl:message>
+   <wsdl:portType name="Write_FITS_ptt">
+      <wsdl:operation name="Write-FITS">
+         <wsdl:input message="tns:Write-FITS_msg"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

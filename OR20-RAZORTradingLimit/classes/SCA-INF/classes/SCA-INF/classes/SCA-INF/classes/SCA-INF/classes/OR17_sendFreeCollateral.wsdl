@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="OR17-sendFreeCollateral" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR17-RAZORFreeCollateral/OR17_sendFreeCollateral" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR17-RAZORFreeCollateral/OR17_sendFreeCollateral" xmlns:imp1="http://www.kpei.co.id/razor/FreeCollateral" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+   <plt:partnerLinkType name="Read_OR17_sendFreeCollateral_plt">
+      <plt:role name="Read-OR17-sendFreeCollateral_role">
+         <plt:portType name="tns:Read_OR17_sendFreeCollateral_ptt"/>
+      </plt:role>
+   </plt:partnerLinkType>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <import namespace="http://www.kpei.co.id/razor/FreeCollateral" schemaLocation="xsd/freeCollateral-request.xsd"/>
+      </schema>
+   </wsdl:types>
+   <wsdl:message name="Read-OR17-sendFreeCollateral_msg">
+      <wsdl:part name="body" element="imp1:kpeiOutbound"/>
+   </wsdl:message>
+   <wsdl:portType name="Read_OR17_sendFreeCollateral_ptt">
+      <wsdl:operation name="Read-OR17-sendFreeCollateral">
+         <wsdl:input message="tns:Read-OR17-sendFreeCollateral_msg"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

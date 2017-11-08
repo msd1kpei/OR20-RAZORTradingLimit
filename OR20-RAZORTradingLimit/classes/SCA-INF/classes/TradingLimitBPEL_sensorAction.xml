@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<actions targetNamespace="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL" xmlns="http://xmlns.oracle.com/bpel/sensor" xmlns:tns="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL" xmlns:pc="http://xmlns.oracle.com/bpel/sensor">
+   <action name="1.Initialization" publishName="OracleBam" publishType="BAM" enabled="true" filter="">
+      <property name="bamTransform">bam/Initialization.xsl</property>
+      <property name="jcaFileName">bam/1.Initialization.jcabam</property>
+      <sensorName>1.Initialization</sensorName>
+   </action>
+   <action name="2.Enrichment-eclears" publishName="OracleBam" publishType="BAM" enabled="true" filter="">
+      <property name="bamTransform">bam/Enrichment.xsl</property>
+      <property name="jcaFileName">bam/2.Enrichment-eclears.jcabam</property>
+      <sensorName>2.Enrichment-eclears</sensorName>
+   </action>
+   <action name="2.Enrichment-rmol" publishName="OracleBam" publishType="BAM" enabled="true" filter="">
+      <property name="bamTransform">bam/Enrichment.xsl</property>
+      <property name="jcaFileName">bam/2.Enrichment-rmol.jcabam</property>
+      <sensorName>2.Enrichment-rmol</sensorName>
+   </action>
+   <action name="2.Enrichment-FITS" publishName="OracleBam" publishType="BAM" enabled="true" filter="">
+      <property name="bamTransform">bam/Enrichment.xsl</property>
+      <property name="jcaFileName">bam/2.Enrichment-FITS.jcabam</property>
+      <sensorName>2.Enrichment-FITS</sensorName>
+   </action>
+   <action name="2.Enrichment-Validator" publishName="OracleBam" publishType="BAM" enabled="true" filter="">
+      <property name="bamTransform">bam/Enrichment.xsl</property>
+      <property name="jcaFileName">bam/2.Enrichment-Validator.jcabam</property>
+      <sensorName>2.Enrichment-Validator</sensorName>
+   </action>
+   <action name="6.Termination" publishName="OracleBam" publishType="BAM" enabled="true" filter="">
+      <property name="bamTransform">bam/Termination.xsl</property>
+      <property name="jcaFileName">bam/6.Termination.jcabam</property>
+      <sensorName>6.Termination</sensorName>
+   </action>
+</actions>

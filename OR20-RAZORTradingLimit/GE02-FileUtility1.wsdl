@@ -5,5 +5,5 @@
          <plnk:portType name="ns1:GE02-FileUtility"/>
       </plnk:role>
    </plnk:partnerLinkType>
-   <wsdl:import namespace="http://www.kpei.co.id/GE02-FileUtility" location="http://SERVICESERVER:7777/kpei/GE02-FileUtility?wsdl"/>
+   <wsdl:import namespace="http://www.kpei.co.id/GE02-FileUtility" location="http://SERVICESERVER:8001/kpei/GE02-FileUtility?wsdl"/>
 </wsdl:definitions>

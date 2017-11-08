@@ -21,9 +21,6 @@
    <reference name="Validator_write" ui:wsdlLocation="Validator_write.wsdl">
       <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/Validator_write#wsdl.interface(Write_Validator_ptt)"/>
    </reference>
-   <reference name="eCLEARS_TradingLimit" ui:wsdlLocation="eCLEARS_TradingLimit.wsdl">
-      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/eCLEARS_TradingLimit#wsdl.interface(sendToEclearsTradingLimit_ptt)"/>
-   </reference>
    <reference name="mi_ws" ui:wsdlLocation="mi_wsWrapper.wsdl">
       <interface.wsdl interface="http://www.kpei.co.id/MemberInterface#wsdl.interface(MemberInterfaceServicesSoap)"/>
    </reference>
@@ -32,5 +29,8 @@
    </reference>
    <reference name="TradingLimit" ui:wsdlLocation="TradingLimit.wsdl">
       <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/TradingLimit#wsdl.interface(Produce_Message_ptt)"/>
+   </reference>
+   <reference name="SendTL_Outbound" ui:wsdlLocation="Outbound_1Wrapper.wsdl">
+      <interface.wsdl interface="http://xmlns.oracle.com/tokenLoginapp/MessageGateway/MessageGateway#wsdl.interface(sendMessage_ptt)"/>
    </reference>
 </componentType>

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<sensors targetNamespace="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL" xmlns="http://xmlns.oracle.com/bpel/sensor" xmlns:tns="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL" xmlns:pc="http://xmlns.oracle.com/bpel/sensor" xmlns:ns8="http://www.kpei.co.id/razor/TradingLimit">
+   <sensor sensorName="1.Initialization" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="receiveInput">
+      <activityConfig evalTime="activation">
+         <variable outputDataType="string" outputNamespace="http://www.w3.org/2001/XMLSchema" target="$inputVariable/payload/ns8:kpeiOutbound/ns8:body/@type"/>
+      </activityConfig>
+   </sensor>
+   <sensor sensorName="2.Enrichment-eclears" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="t_eclears">
+      <activityConfig evalTime="completion"/>
+   </sensor>
+   <sensor sensorName="2.Enrichment-rmol" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="t_RMOL">
+      <activityConfig evalTime="completion"/>
+   </sensor>
+   <sensor sensorName="2.Enrichment-FITS" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="t_FITS">
+      <activityConfig evalTime="completion"/>
+   </sensor>
+   <sensor sensorName="2.Enrichment-Validator" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="t_Validator">
+      <activityConfig evalTime="completion"/>
+   </sensor>
+   <sensor sensorName="6.Termination" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="create_msg">
+      <activityConfig evalTime="completion"/>
+   </sensor>
+</sensors>

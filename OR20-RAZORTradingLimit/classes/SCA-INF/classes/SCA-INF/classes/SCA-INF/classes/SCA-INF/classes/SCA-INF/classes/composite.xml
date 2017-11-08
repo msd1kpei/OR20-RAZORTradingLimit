@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<composite name="OR20-RAZORTradingLimit" applicationName="default" revision="4.2" label="soa_fc18df7e-483f-4e89-bbb2-1c341b6a7321" mode="active" state="on" home="/soa1/app/oracle/admin/soadev/mserver/soadev/servers/wls_soa1/dc/soa_fc18df7e-483f-4e89-bbb2-1c341b6a7321" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://xmlns.oracle.com/sca/1.0" xmlns:ui="http://xmlns.oracle.com/soa/designer/">
+   <import location="OR20_sendTradingLimit.wsdl" importType="wsdl" namespace="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/OR20_sendTradingLimit"/>
+   <import location="http://SERVICESERVER:8001/soa-infra/services/default/GE03-XMLUtility/GE03-XMLUtility.wsdl" importType="wsdl" namespace="http://oracle.com/sca/soapservice/kpei/GE03-XMLUtility/GE03_XMLUtility"/>
+   <import location="http://SERVICESERVER:8001/kpei/GE02-FileUtility?wsdl" importType="wsdl" namespace="http://www.kpei.co.id/GE02-FileUtility"/>
+   <import location="FITS_write.wsdl" importType="wsdl" namespace="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/FITS_write"/>
+   <import location="Validator_write.wsdl" importType="wsdl" namespace="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/Validator_write"/>
+   <import location="RMOL_write.wsdl" importType="wsdl" namespace="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/RMOL_write"/>
+   <import location="TradingLimitBPEL.wsdl" importType="wsdl" namespace="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL"/>
+   <import location="messageMonitorServiceRef.wsdl" importType="wsdl" namespace="http://oracle.com/sca/soapservice/KPEI-MIDDLEWARE/Ge01-messageMonitor/messageMonitorService"/>
+   <import location="GE03-XMLUtilityRef.wsdl" importType="wsdl" namespace="http://oracle.com/sca/soapservice/kpei/GE03-XMLUtility/GE03_XMLUtility"/>
+   <import location="GE02-FileUtility1.wsdl" importType="wsdl" namespace="http://www.kpei.co.id/GE02-FileUtility"/>
+   <import location="mi_wsWrapper.wsdl" importType="wsdl" namespace="http://www.kpei.co.id/MemberInterface"/>
+   <import location="AllocatedTradingLimitSetWrapper.wsdl" importType="wsdl" namespace="http://www.kpei.co.id/service/tradinglimit/AllocatedTradingLimitSet"/>
+   <import location="http://serviceserver:8001/soa-infra/services/MWII/MWII-06-TradingLimit/AllocatedTradingLimitSet.wsdl" importType="wsdl" namespace="http://www.kpei.co.id/service/tradinglimit/AllocatedTradingLimitSet"/>
+   <import location="http://serviceserver:8001/soa-infra/services/MWII/MIServices/MIServices.wsdl" importType="wsdl" namespace="http://www.kpei.co.id/MemberInterface"/>
+   <import location="TradingLimit.wsdl" importType="wsdl" namespace="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/TradingLimit"/>
+   <import location="OR20_RAZORTradingLimit.wsdl" importType="wsdl" namespace="http://oracle.com/sca/soapservice/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/OR20_RAZORTradingLimit"/>
+   <import location="http://soavhn1.corp.kpei.co.id:7777/soa-infra/services/default/GE03-XMLUtility/GE03-XMLUtility.wsdl" importType="wsdl" namespace="http://oracle.com/sca/soapservice/kpei/GE03-XMLUtility/GE03_XMLUtility"/>
+   <import location="http://SERVICESERVER:7777/kpei/GE02-FileUtility?wsdl" importType="wsdl" namespace="http://www.kpei.co.id/GE02-FileUtility"/>
+   <import location="Outbound.wsdl" importType="wsdl" namespace="http://xmlns.oracle.com/MW-OSB/TradingLimit/TradingLimit"/>
+   <import location="http://soavhn1.corp.kpei.co.id:7777/soa-infra/services/default/GE01-MessageMonitor/messageMonitorService.wsdl" importType="wsdl" namespace="http://oracle.com/sca/soapservice/KPEI-MIDDLEWARE/Ge01-messageMonitor/messageMonitorService"/>
+   <import namespace="http://xmlns.oracle.com/tokenLoginapp/MessageGateway/MessageGateway" location="Outbound_1.wsdl" importType="wsdl"/>
+   <import namespace="http://xmlns.oracle.com/tokenLoginapp/MessageGateway/MessageGateway" location="Outbound_1Wrapper.wsdl" importType="wsdl"/>
+   <service name="OR20-RAZORTradingLimit">
+      <interface.wsdl interface="http://oracle.com/sca/soapservice/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/OR20_RAZORTradingLimit#wsdl.interface(TradingLimitSend_ptt)"/>
+      <binding.ws port="http://oracle.com/sca/soapservice/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/OR20_RAZORTradingLimit#wsdl.endpoint(OR20-RAZORTradingLimit/TradingLimitSend_pt)" streamIncomingAttachments="false" streamOutgoingAttachments="false">
+         <property name="weblogic.wsee.wsat.transaction.flowOption" type="xs:string" many="false">NEVER</property>
+      </binding.ws>
+   </service>
+   <service name="OR20-sendTradingLimit">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/OR20_sendTradingLimit#wsdl.interface(Read_OR20_sendTradingLimit_ptt)"/>
+      <binding.jca config="OR20-sendTradingLimit_file.jca" portType="Read_OR20_sendTradingLimit_ptt" operation="Read-OR20-sendTradingLimit">
+         <property name="singleton" many="false" source="Read_OR20_sendTradingLimit_ptt:Read-OR20-sendTradingLimit[hdr]">true</property>
+         <property name="PhysicalDirectory" type="xs:string" many="false" source="Read_OR20_sendTradingLimit_ptt:Read-OR20-sendTradingLimit[jca]">/soa1/app/oracle/admin/share/razor_ext/gateway/outbound/riskFactor/queue</property>
+      </binding.jca>
+   </service>
+   <property name="auditLevel" many="false">Development</property>
+   <property name="validateSchema" type="xs:boolean" many="false">false</property>
+   <component name="TradingLimitMediator">
+      <implementation.mediator src="TradingLimitMediator.mplan"/>
+      <property name="isResequencing" many="false" override="may">false</property>
+      <business-events/>
+   </component>
+   <component name="TradingLimitBPEL">
+      <implementation.bpel src="TradingLimitBPEL.bpel"/>
+      <property name="configuration.sensorLocation" type="xs:string" many="false">TradingLimitBPEL_sensor.xml</property>
+      <property name="configuration.sensorActionLocation" type="xs:string" many="false">TradingLimitBPEL_sensorAction.xml</property>
+      <business-events/>
+   </component>
+   <component name="TradingLimitSendMediator">
+      <implementation.mediator src="TradingLimitSendMediator.mplan"/>
+      <property name="isResequencing" many="false" override="may">false</property>
+      <business-events/>
+   </component>
+   <reference name="RMOL_write">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/RMOL_write#wsdl.interface(Write_RMOL_ptt)"/>
+      <binding.jca config="RMOL_write_file.jca" portType="Write_RMOL_ptt"/>
+   </reference>
+   <reference name="GE03-XMLUtility">
+      <interface.wsdl interface="http://oracle.com/sca/soapservice/kpei/GE03-XMLUtility/GE03_XMLUtility#wsdl.interface(GE03-XMLUtility)"/>
+      <binding.ws port="http://oracle.com/sca/soapservice/kpei/GE03-XMLUtility/GE03_XMLUtility#wsdl.endpoint(GE03-XMLUtility/GE03-XMLUtility_pt)" soapVersion="1.1" location="http://soavhn1.corp.kpei.co.id:7777/soa-infra/services/default/GE03-XMLUtility/GE03-XMLUtility?wsdl" streamIncomingAttachments="false" streamOutgoingAttachments="false">
+         <property name="weblogic.wsee.wsat.transaction.flowOption" type="xs:string" many="false">NEVER</property>
+      </binding.ws>
+   </reference>
+   <reference name="SendTradingLimit" ui:wsdlLocation="Outbound.wsdl">
+      <interface.wsdl interface="http://xmlns.oracle.com/MW-OSB/TradingLimit/TradingLimit#wsdl.interface(sendTradingLimit_ptt)"/>
+      <binding.ws port="http://xmlns.oracle.com/MW-OSB/TradingLimit/TradingLimit#wsdl.endpoint(execute_bindQSService/execute_bindQSPort)" location="Outbound.wsdl" soapVersion="1.1">
+         <property name="weblogic.wsee.wsat.transaction.flowOption" type="xs:string" many="false">WSDLDriven</property>
+      </binding.ws>
+   </reference>
+   <reference name="mi_ws">
+      <interface.wsdl interface="http://www.kpei.co.id/MemberInterface#wsdl.interface(MemberInterfaceServicesSoap)"/>
+      <binding.ws port="http://www.kpei.co.id/MemberInterface#wsdl.endpoint(MIServices/MemberInterfaceServicesSoap_pt)" soapVersion="1.1" location="http://serviceserver:8001/soa-infra/services/MWII/MIServices/MIServices?WSDL" streamIncomingAttachments="false" streamOutgoingAttachments="false">
+         <property name="weblogic.wsee.wsat.transaction.flowOption" type="xs:string" many="false">NEVER</property>
+      </binding.ws>
+   </reference>
+   <reference name="TradingLimit">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/TradingLimit#wsdl.interface(Produce_Message_ptt)"/>
+      <binding.jca config="TradingLimit_jms.jca" portType="Produce_Message_ptt"/>
+   </reference>
+   <reference name="Validator_write">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/Validator_write#wsdl.interface(Write_Validator_ptt)"/>
+      <binding.jca config="Validator_write_file.jca" portType="Write_Validator_ptt"/>
+   </reference>
+   <reference name="atl_ws">
+      <interface.wsdl interface="http://www.kpei.co.id/service/tradinglimit/AllocatedTradingLimitSet#wsdl.interface(execute_ptt)"/>
+      <binding.ws port="http://www.kpei.co.id/service/tradinglimit/AllocatedTradingLimitSet#wsdl.endpoint(AllocatedTradingLimitSet/execute_pt)" soapVersion="1.1" location="http://serviceserver:8001/soa-infra/services/MWII/MWII-06-TradingLimit/AllocatedTradingLimitSet?WSDL" streamIncomingAttachments="false" streamOutgoingAttachments="false">
+         <property name="weblogic.wsee.wsat.transaction.flowOption" type="xs:string" many="false">NEVER</property>
+      </binding.ws>
+   </reference>
+   <reference name="GE01-MessageMonitor">
+      <interface.wsdl interface="http://oracle.com/sca/soapservice/KPEI-MIDDLEWARE/Ge01-messageMonitor/messageMonitorService#wsdl.interface(messageMonitor)"/>
+      <binding.ws port="http://oracle.com/sca/soapservice/KPEI-MIDDLEWARE/Ge01-messageMonitor/messageMonitorService#wsdl.endpoint(GE01-MessageMonitor/messageMonitor_pt)" soapVersion="1.1" location="http://SERVICESERVER:8001/soa-infra/services/default/GE01-MessageMonitor/GE01-MessageMonitor?WSDL" streamIncomingAttachments="false" streamOutgoingAttachments="false">
+         <property name="weblogic.wsee.wsat.transaction.flowOption" type="xs:string" many="false">NEVER</property>
+      </binding.ws>
+   </reference>
+   <reference name="GE02-FileUtility">
+      <interface.wsdl interface="http://www.kpei.co.id/GE02-FileUtility#wsdl.interface(GE02-FileUtility)"/>
+      <binding.ws port="http://www.kpei.co.id/GE02-FileUtility#wsdl.endpoint(GE02-FileUtility/GE02-FileUtility)" soapVersion="1.2" location="http://SERVICESERVER:7777/kpei/GE02-FileUtility?wsdl" streamIncomingAttachments="false" streamOutgoingAttachments="false">
+         <property name="weblogic.wsee.wsat.transaction.flowOption" type="xs:string" many="false">NEVER</property>
+      </binding.ws>
+   </reference>
+   <reference name="FITS_write">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/FITS_write#wsdl.interface(Write_FITS_ptt)"/>
+      <binding.jca config="FITS_write_file.jca" portType="Write_FITS_ptt"/>
+   </reference>
+   <reference name="SendTL_Outbound" ui:wsdlLocation="Outbound_1.wsdl">
+      <interface.wsdl interface="http://xmlns.oracle.com/tokenLoginapp/MessageGateway/MessageGateway#wsdl.interface(sendMessage_ptt)"/>
+      <binding.ws port="http://xmlns.oracle.com/tokenLoginapp/MessageGateway/MessageGateway#wsdl.endpoint(execute_bindQSService/execute_bindQSPort)" location="Outbound_1.wsdl" soapVersion="1.1">
+         <property name="weblogic.wsee.wsat.transaction.flowOption" type="xs:string" many="false">WSDLDriven</property>
+      </binding.ws>
+   </reference>
+   <wire>
+      <source.uri>TradingLimitBPEL/Validator_write</source.uri>
+      <target.uri>Validator_write</target.uri>
+   </wire>
+   <wire>
+      <source.uri>TradingLimitBPEL/GE03-XMLUtility</source.uri>
+      <target.uri>GE03-XMLUtility</target.uri>
+   </wire>
+   <wire>
+      <source.uri>TradingLimitBPEL/RMOL_write</source.uri>
+      <target.uri>RMOL_write</target.uri>
+   </wire>
+   <wire>
+      <source.uri>TradingLimitMediator/TradingLimitBPEL.tradinglimitbpel_client</source.uri>
+      <target.uri>TradingLimitBPEL/tradinglimitbpel_client</target.uri>
+   </wire>
+   <wire>
+      <source.uri>TradingLimitBPEL/mi_ws</source.uri>
+      <target.uri>mi_ws</target.uri>
+   </wire>
+   <wire>
+      <source.uri>TradingLimitBPEL/atl_ws</source.uri>
+      <target.uri>atl_ws</target.uri>
+   </wire>
+   <wire>
+      <source.uri>TradingLimitSendMediator/TradingLimitBPEL.tradinglimitbpel_client</source.uri>
+      <target.uri>TradingLimitBPEL/tradinglimitbpel_client</target.uri>
+   </wire>
+   <wire>
+      <source.uri>TradingLimitBPEL/TradingLimit</source.uri>
+      <target.uri>TradingLimit</target.uri>
+   </wire>
+   <wire>
+      <source.uri>TradingLimitBPEL/GE01-MessageMonitor</source.uri>
+      <target.uri>GE01-MessageMonitor</target.uri>
+   </wire>
+   <wire>
+      <source.uri>OR20-RAZORTradingLimit</source.uri>
+      <target.uri>TradingLimitSendMediator/TradingLimitSendMediator</target.uri>
+   </wire>
+   <wire>
+      <source.uri>TradingLimitBPEL/GE02-FileUtility</source.uri>
+      <target.uri>GE02-FileUtility</target.uri>
+   </wire>
+   <wire>
+      <source.uri>TradingLimitBPEL/FITS_write</source.uri>
+      <target.uri>FITS_write</target.uri>
+   </wire>
+   <wire>
+      <source.uri>OR20-sendTradingLimit</source.uri>
+      <target.uri>TradingLimitMediator/TradingLimitMediator</target.uri>
+   </wire>
+   <wire>
+      <source.uri>TradingLimitBPEL/SendTL_Outbound</source.uri>
+      <target.uri>SendTL_Outbound</target.uri>
+   </wire>
+</composite>

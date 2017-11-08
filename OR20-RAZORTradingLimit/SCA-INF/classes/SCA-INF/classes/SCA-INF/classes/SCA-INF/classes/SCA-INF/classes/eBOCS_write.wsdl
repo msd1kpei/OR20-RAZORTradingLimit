@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="eBOCS_write" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR17-RAZORFreeCollateral/eBOCS_write" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR17-RAZORFreeCollateral/eBOCS_write" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:imp1="http://www.kpei.co.id/razor/FreeCollateral/eBOCS_write" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+   <plt:partnerLinkType name="Write_eBOCS_FreeCollateral_plt">
+      <plt:role name="Write-eBOCS-FreeCollateral_role">
+         <plt:portType name="tns:Write_eBOCS_FreeCollateral_ptt"/>
+      </plt:role>
+   </plt:partnerLinkType>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <import namespace="http://www.kpei.co.id/razor/FreeCollateral/eBOCS_write" schemaLocation="xsd/ebocs_write.xsd"/>
+      </schema>
+   </wsdl:types>
+   <wsdl:message name="Write-eBOCS-FreeCollateral_msg">
+      <wsdl:part name="body" element="imp1:records"/>
+   </wsdl:message>
+   <wsdl:portType name="Write_eBOCS_FreeCollateral_ptt">
+      <wsdl:operation name="Write-eBOCS-FreeCollateral">
+         <wsdl:input message="tns:Write-eBOCS-FreeCollateral_msg"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

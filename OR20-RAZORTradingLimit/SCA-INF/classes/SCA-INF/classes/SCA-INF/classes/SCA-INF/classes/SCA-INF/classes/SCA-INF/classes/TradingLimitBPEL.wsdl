@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="TradingLimitBPEL" targetNamespace="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL" xmlns:ns2="http://www.kpei.co.id/middleware/outbound/tradingLimit" xmlns:ns1="http://www.kpei.co.id/razor/TradingLimit" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:ns4="http://schemas.oracle.com/bpel/extension" xmlns:ns3="http://www.kpei.co.id/razor/FreeCollateral/RMOL_write" xmlns:client="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://www.kpei.co.id/schema/TradingLimit">
+   <plnk:partnerLinkType name="TradingLimitBPEL">
+      <plnk:role name="TradingLimitBPELProvider">
+         <plnk:portType name="client:TradingLimitBPEL"/>
+      </plnk:role>
+   </plnk:partnerLinkType>
+   <wsdl:import namespace="http://schemas.oracle.com/bpel/extension" location="RuntimeFault.wsdl"/>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.kpei.co.id/middleware/outbound/tradingLimit" xmlns:ns1="http://www.kpei.co.id/razor/TradingLimit" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:client="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns3="http://www.kpei.co.id/razor/FreeCollateral/RMOL_write" xmlns:ns4="http://schemas.oracle.com/bpel/extension">
+         <import namespace="http://www.kpei.co.id/razor/TradingLimit" schemaLocation="xsd/tradingLimit-request.xsd"/>
+      </schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.kpei.co.id/middleware/outbound/tradingLimit" xmlns:ns1="http://www.kpei.co.id/razor/TradingLimit" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:client="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns3="http://www.kpei.co.id/razor/FreeCollateral/RMOL_write" xmlns:ns4="http://schemas.oracle.com/bpel/extension">
+         <xsd:import namespace="http://www.kpei.co.id/middleware/outbound/tradingLimit" schemaLocation="xsd/tradingLimit-response.xsd"/>
+      </xsd:schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.kpei.co.id/middleware/outbound/tradingLimit" xmlns:ns1="http://www.kpei.co.id/razor/TradingLimit" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:ns3="http://www.kpei.co.id/razor/FreeCollateral/RMOL_write" xmlns:client="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR20_RAZORTradingLimit/TradingLimitBPEL" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns4="http://schemas.oracle.com/bpel/extension">
+         <xsd:import namespace="http://www.kpei.co.id/razor/FreeCollateral/RMOL_write" schemaLocation="xsd/rmol_write.xsd"/>
+      </xsd:schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://www.kpei.co.id/schema/TradingLimit" schemaLocation="xsd/TradingLimitSKD.xsd"/>
+      </xsd:schema>
+   </wsdl:types>
+   <wsdl:message name="TradingLimitBPELRequestMessage">
+      <wsdl:part name="payload" element="ns1:kpeiOutbound"/>
+   </wsdl:message>
+   <wsdl:portType name="TradingLimitBPEL">
+      <wsdl:operation name="process">
+         <wsdl:input message="client:TradingLimitBPELRequestMessage"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

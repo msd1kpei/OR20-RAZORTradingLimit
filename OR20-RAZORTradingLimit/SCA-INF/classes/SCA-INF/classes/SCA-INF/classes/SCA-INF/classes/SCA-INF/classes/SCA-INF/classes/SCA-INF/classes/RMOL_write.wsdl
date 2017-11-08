@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="RMOL_write" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/RMOL_write" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/RMOL_write" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:imp1="http://www.kpei.co.id/razor/FreeCollateral/RMOL_write" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+   <plt:partnerLinkType name="Write_RMOL_plt">
+      <plt:role name="Write-RMOL_role">
+         <plt:portType name="tns:Write_RMOL_ptt"/>
+      </plt:role>
+   </plt:partnerLinkType>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <import namespace="http://www.kpei.co.id/razor/FreeCollateral/RMOL_write" schemaLocation="xsd/rmol_write.xsd"/>
+      </schema>
+   </wsdl:types>
+   <wsdl:message name="Write-RMOL_msg">
+      <wsdl:part name="body" element="imp1:records"/>
+   </wsdl:message>
+   <wsdl:portType name="Write_RMOL_ptt">
+      <wsdl:operation name="Write-RMOL">
+         <wsdl:input message="tns:Write-RMOL_msg"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

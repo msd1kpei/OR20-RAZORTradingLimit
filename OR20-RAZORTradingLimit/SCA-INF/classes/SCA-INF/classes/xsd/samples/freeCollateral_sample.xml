@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<kpeiOutbound xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.kpei.co.id/razor/FreeCollateral file:/C:/WORK/DEVELOPMENT/ARIS-KPEI-PROJECT/OR17-RAZORFreeCollateral/xsd/freeCollateral-request.xsd" xmlns="http://www.kpei.co.id/razor/FreeCollateral">
+   <header id="id71">
+      <asAt>2010-03-30T11:05:03.040</asAt>
+      <sourceSystem>string72</sourceSystem>
+   </header>
+   <body>
+      <responses>
+         <response market="SBL" memberId="memberId75" asAt="2010-03-30T11:05:03.040">
+            <value>76</value>
+         </response>
+         <response market="Fixed Income" memberId="memberId78" asAt="2010-03-30T11:05:03.040">
+            <value>79</value>
+         </response>
+         <response market="Derivatives" memberId="memberId81" asAt="2010-03-30T11:05:03.040">
+            <value>82</value>
+         </response>
+         <response market="Equities" memberId="memberId81" asAt="2010-03-30T11:05:03.040">
+            <value>82</value>
+         </response>
+      </responses>
+   </body>
+</kpeiOutbound>

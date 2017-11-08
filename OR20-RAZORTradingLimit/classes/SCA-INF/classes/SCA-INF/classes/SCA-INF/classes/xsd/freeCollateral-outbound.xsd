@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.kpei.co.id/middleware/outbound/freeCollateral" xmlns:nxsd="http://xmlns.oracle.com/pcbpel/nxsd" nxsd:version="DTD">
+   <include schemaLocation="RAZORFreeCollateral"/>
+</schema>

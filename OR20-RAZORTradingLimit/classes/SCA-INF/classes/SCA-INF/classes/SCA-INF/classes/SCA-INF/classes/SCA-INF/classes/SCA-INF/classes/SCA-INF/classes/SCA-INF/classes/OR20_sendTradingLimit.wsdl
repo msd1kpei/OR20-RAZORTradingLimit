@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="OR20-sendTradingLimit" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/OR20_sendTradingLimit" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/file/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/OR20_sendTradingLimit" xmlns:imp1="http://www.kpei.co.id/razor/TradingLimit" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+   <plt:partnerLinkType name="Read_OR20_sendTradingLimit_plt">
+      <plt:role name="Read-OR20-sendTradingLimit_role">
+         <plt:portType name="tns:Read_OR20_sendTradingLimit_ptt"/>
+      </plt:role>
+   </plt:partnerLinkType>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <import namespace="http://www.kpei.co.id/razor/TradingLimit" schemaLocation="xsd/tradingLimit-request.xsd"/>
+      </schema>
+   </wsdl:types>
+   <wsdl:message name="Read-OR20-sendTradingLimit_msg">
+      <wsdl:part name="body" element="imp1:kpeiOutbound"/>
+   </wsdl:message>
+   <wsdl:portType name="Read_OR20_sendTradingLimit_ptt">
+      <wsdl:operation name="Read-OR20-sendTradingLimit">
+         <wsdl:input message="tns:Read-OR20-sendTradingLimit_msg"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

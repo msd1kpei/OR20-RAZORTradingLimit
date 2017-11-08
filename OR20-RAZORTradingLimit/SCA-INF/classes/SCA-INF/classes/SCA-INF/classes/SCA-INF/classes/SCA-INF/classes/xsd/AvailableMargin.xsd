@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.kpei.co.id/schema/AvailableMargin" xmlns:ns1="http://www.kpei.co.id/schema/Header" xmlns:ns2="http://www.kpei.co.id/schema/Extension" targetNamespace="http://www.kpei.co.id/schema/AvailableMargin" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2012.07.05">
+   <xsd:import namespace="http://www.kpei.co.id/schema/Header" schemaLocation="Header.xsd"/>
+   <xsd:import namespace="http://www.kpei.co.id/schema/Extension" schemaLocation="Extension.xsd"/>
+   <xsd:element name="AvailableMargin">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="header" type="ns1:Header"/>
+            <xsd:element name="body" type="AvailableMarginCollections"/>
+            <xsd:element name="ext" type="ns2:Extension" minOccurs="0"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+   <xsd:complexType name="AvailableMarginCollections">
+      <xsd:sequence>
+         <xsd:element name="availableMarginItem" type="AvailableMarginItem" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="AvailableMarginItem">
+      <xsd:sequence>
+         <xsd:element name="firmId" type="xsd:string"/>
+         <xsd:element name="market" type="xsd:string"/>
+         <xsd:element name="value" type="xsd:decimal" minOccurs="0"/>
+         <xsd:element name="ClientList" type="ClientListCollections" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="ClientListCollections">
+      <xsd:sequence>
+         <xsd:element name="client" type="ClientListItem" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="ClientListItem">
+      <xsd:sequence>
+         <xsd:element name="SID" type="xsd:string"/>
+         <xsd:element name="value" type="xsd:decimal" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

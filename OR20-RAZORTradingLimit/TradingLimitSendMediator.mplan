@@ -5,7 +5,7 @@
          <case executionType="direct" name="TradingLimitBPEL.tradinglimitbpel_client.process">
             <action>
                <transform>
-                  <part name="$out.payload" function="xslt(xsl/kpeiOutbound_TLSend_To_kpeiOutbound_BPEL.xsl, $in.part1)"/>
+                  <part name="$out.payload" function="xslt(xsl/kpeiOutbound_TLSend_To_kpeiOutbound_BPEL1.xsl, $in.part1)"/>
                </transform>
                <invoke reference="TradingLimitBPEL.tradinglimitbpel_client" operation="process"/>
             </action>

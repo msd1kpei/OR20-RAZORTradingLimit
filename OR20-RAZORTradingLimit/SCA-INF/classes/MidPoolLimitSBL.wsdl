@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="MidPoolLimitSBL" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR17-RAZORFreeCollateral/MidPoolLimitSBL" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/jms/ARIS-KPEI-PROJECT/OR17-RAZORFreeCollateral/MidPoolLimitSBL" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+   <plt:partnerLinkType name="Produce_Message_plt">
+      <plt:role name="Produce_Message_role">
+         <plt:portType name="tns:Produce_Message_ptt"/>
+      </plt:role>
+   </plt:partnerLinkType>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <include schemaLocation="xsd/RAZORFreeCollateral"/>
+      </schema>
+   </wsdl:types>
+   <wsdl:message name="Produce_Message_msg">
+      <wsdl:part name="body" element="kpeiOutbound"/>
+   </wsdl:message>
+   <wsdl:portType name="Produce_Message_ptt">
+      <wsdl:operation name="Produce_Message">
+         <wsdl:input message="tns:Produce_Message_msg"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

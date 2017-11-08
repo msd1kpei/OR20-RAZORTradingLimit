@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="freeCollateralBPEL" targetNamespace="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR17_RAZORFreeCollateral/freeCollateralBPEL" xmlns:ns2="http://www.kpei.co.id/middleware/outbound/freeCollateral" xmlns:ns1="http://www.kpei.co.id/razor/FreeCollateral" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:ns4="http://www.kpei.co.id/razor/FreeCollateral/RMOL_write" xmlns:ns3="http://www.kpei.co.id/razor/FreeCollateral/eBOCS_write" xmlns:client="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR17_RAZORFreeCollateral/freeCollateralBPEL" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://schemas.oracle.com/bpel/extension">
+   <plnk:partnerLinkType name="freeCollateralBPEL">
+      <plnk:role name="freeCollateralBPELProvider">
+         <plnk:portType name="client:freeCollateralBPEL"/>
+      </plnk:role>
+   </plnk:partnerLinkType>
+   <wsdl:import namespace="http://schemas.oracle.com/bpel/extension" location="RuntimeFault.wsdl"/>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <import namespace="http://www.kpei.co.id/razor/FreeCollateral" schemaLocation="xsd/freeCollateral-request.xsd"/>
+      </schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://www.kpei.co.id/middleware/outbound/freeCollateral" schemaLocation="xsd/freeCollateral-outbound.xsd"/>
+      </xsd:schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://www.kpei.co.id/razor/FreeCollateral/eBOCS_write" schemaLocation="xsd/ebocs_write.xsd"/>
+      </xsd:schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://www.kpei.co.id/razor/FreeCollateral/RMOL_write" schemaLocation="xsd/rmol_write.xsd"/>
+      </xsd:schema>
+   </wsdl:types>
+   <wsdl:message name="freeCollateralBPELRequestMessage">
+      <wsdl:part name="payload" element="ns1:kpeiOutbound"/>
+   </wsdl:message>
+   <wsdl:portType name="freeCollateralBPEL">
+      <wsdl:operation name="process">
+         <wsdl:input message="client:freeCollateralBPELRequestMessage"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

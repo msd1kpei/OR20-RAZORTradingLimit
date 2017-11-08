@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<actions targetNamespace="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR17_RAZORFreeCollateral/freeCollateralBPEL" xmlns="http://xmlns.oracle.com/bpel/sensor" xmlns:tns="http://xmlns.oracle.com/ARIS_KPEI_PROJECT_jws/OR17_RAZORFreeCollateral/freeCollateralBPEL" xmlns:pc="http://xmlns.oracle.com/bpel/sensor">
+   <action name="1.Initialization" publishName="OracleBam" publishType="BAM" enabled="true" filter="">
+      <property name="bamTransform">bam/Initialization.xsl</property>
+      <property name="jcaFileName">bam/1.Initialization.jcabam</property>
+      <sensorName>1.Initialization</sensorName>
+   </action>
+   <action name="2.Enrichment_rmol" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/Enrichment.xsl</property>
+      <property name="jcaFileName">bam/2.Enrichment_rmol.jcabam</property>
+      <sensorName>2.Enrichment_rmol</sensorName>
+   </action>
+   <action name="2.Enrichment_ebocs" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/Enrichment.xsl</property>
+      <property name="jcaFileName">bam/2.Enrichment_ebocs.jcabam</property>
+      <sensorName>2.Enrichment_ebocs</sensorName>
+   </action>
+   <action name="2.Enrichment_eclears" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/Enrichment.xsl</property>
+      <property name="jcaFileName">bam/2.Enrichment_eclears.jcabam</property>
+      <sensorName>2.Enrichment_eclears</sensorName>
+   </action>
+   <action name="3.Sending-Local-rmol" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/Sending-Local.xsl</property>
+      <property name="jcaFileName">bam/3.Sending-Local-rmol.jcabam</property>
+      <sensorName>3.Sending-Local-rmol</sensorName>
+   </action>
+   <action name="3.Sending-Local-ebocs" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/Sending-Local.xsl</property>
+      <property name="jcaFileName">bam/3.Sending-Local-ebocs.jcabam</property>
+      <sensorName>3.Sending-Local-ebocs</sensorName>
+   </action>
+   <action name="3.Sending-Local" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/Sending-Local.xsl</property>
+      <property name="jcaFileName">bam/3.Sending-Local.jcabam</property>
+      <sensorName>3.Sending-Local</sensorName>
+   </action>
+   <action name="6.Termination-rmol" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/Termination.xsl</property>
+      <property name="jcaFileName">bam/6.Termination-rmol.jcabam</property>
+      <sensorName>6.Termination-rmol</sensorName>
+   </action>
+   <action name="6.Termination-ebocs" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="jcaFileName">bam/6.Termination-ebocs.jcabam</property>
+      <property name="bamTransform">bam/Termination.xsl</property>
+      <sensorName>6.Termination-ebocs</sensorName>
+   </action>
+   <action name="6.Termination" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="jcaFileName">bam/6.Termination.jcabam</property>
+      <property name="bamTransform">bam/Termination.xsl</property>
+      <sensorName>6.Termination</sensorName>
+   </action>
+</actions>

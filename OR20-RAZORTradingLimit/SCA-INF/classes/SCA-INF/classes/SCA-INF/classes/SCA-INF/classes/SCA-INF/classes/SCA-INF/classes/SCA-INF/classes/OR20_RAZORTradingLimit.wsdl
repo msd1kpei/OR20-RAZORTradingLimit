@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="OR20_RAZORTradingLimit" targetNamespace="http://oracle.com/sca/soapservice/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/OR20_RAZORTradingLimit" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:inp1="http://www.kpei.co.id/razor/TradingLimit" xmlns:tns="http://oracle.com/sca/soapservice/ARIS-KPEI-PROJECT/OR20-RAZORTradingLimit/OR20_RAZORTradingLimit">
+   <wsdl:types>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://www.kpei.co.id/razor/TradingLimit" schemaLocation="xsd/tradingLimit-request.xsd"/>
+      </xsd:schema>
+   </wsdl:types>
+   <wsdl:message name="requestMessage">
+      <wsdl:part name="part1" element="inp1:kpeiOutbound"/>
+   </wsdl:message>
+   <wsdl:portType name="TradingLimitSend_ptt">
+      <wsdl:operation name="TradingLimitSend">
+         <wsdl:input message="tns:requestMessage"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

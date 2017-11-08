@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<schema targetNamespace="http://www.kpei.co.id/schema/TradingLimit.001" nxsd:version="DTD" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:nxsd="http://xmlns.oracle.com/pcbpel/nxsd">
+   <include schemaLocation="TradingLimit.001.xsd"/>
+</schema>

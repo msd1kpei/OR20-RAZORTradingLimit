@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://www.kpei.co.id/schema/MiddlewareHeader" targetNamespace="http://www.kpei.co.id/schema/Header" elementFormDefault="qualified" version="2012.07.12">
+   <xsd:complexType name="Header">
+      <xsd:annotation>
+         <xsd:documentation>Standard Middleware Header</xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="asAt" type="xsd:dateTime">
+            <xsd:annotation>
+               <xsd:documentation>timestamp; ex. 2010-01-01T01:01:01</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="source" type="xsd:string">
+            <xsd:annotation>
+               <xsd:documentation>source system; ex. Datafeed</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="id" type="xsd:string">
+         <xsd:annotation>
+            <xsd:documentation>id for distinguish between message; can be sequence or
+                       filename_yyyymmddh24miss</xsd:documentation>
+         </xsd:annotation>
+      </xsd:attribute>
+   </xsd:complexType>
+</xsd:schema>
